@@ -1,43 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<!--~~~~~~~~~~~~~~~~ index.html of bbauska/Silus-puzzle for puzzle.bauska.org ~~~~~~~~~~~~~~~~~~-->
+<head>
+  <meta charset="utf-8">
+  <!-- meta viewport, title, desc, robot for SEO -->
+  <meta name="author" content="Brian Bauska">
+  <meta name="title" content="Silus Gaming World Jigsaw Puzzle">
+  <meta name="description" content="Make any puzzle from a loaded image. Either 12 pieces, 25, 100">
+  <meta name="keywords" content="website,web,site,zombie,Politics,culture,casino,capitalism,capitalize,
+    political,disposability,death,America,culture,power,society,greed,avarice,excess,gluttony,selfishness,
+    MIC,Military,Industrial,Complex,corruption,Dulles,Bush,Reagan,justice,youth,democracy,psychology,
+    ideology,governance,spectacle,casinocapitalism,zombie,steak,Steak,YouTube,Sonic,sonic,SONIC,Silus,
+    Gaming,World,LuccasNeto,T-Series,SETIndia,Cocomelon,MrBeast,Beast,CE1,C-E-1,Beast,SilusGamingWorld,
+    SilusSpider,NickAR,Nick,NY,NYNick,NewYorkNick,URCristiano,UR,Cristiano,KidsDimaShow,VladandNiki,
+    LuisitoComunica,BrightSide,ZeeTV,DudePerfect,TipsOfficial,FNAF,FiveNightsatFreddies,TheMusicCompany,
+    PewDiePie, 5minutecrafts,A4,Sambucha,Sam&Colby,Sam&ColbyReacts,JuiceWorld,RayWilliamJohnson,FGTV,
+    KaicenatLive,IShowSpeed,Jelly,DanTDM,KSI,LoganPaul,JackSucksAtLife,PackGOD,JakePaul,Jake,PaulJakePaul,
+    SamGaming01,Veshreny,WWE,WorldWrestlingEntertainment,Smosh,DadsSpeed,TopperGuild,InternetAnarchist,
+    GuavaJuice,FortniteYoutubers,Sypherpk,LiveSPEEDY,AdenRoss,Preston,JohnnieJuilbert,YouTubeMovies,Sypherpk,
+    AnnoyingOrange,JackSepticeye,JackFilms,BBNo$,Unspeakable,MarkRober,TheFilmTheorist,TheGameTheorist,
+    Minecraft,TheBoys,JTMusic,DAFUQBoom!?,AIMIN,Robby,BrentTV,EYStream,Fortnite,Ninja,SunnyV2,N30N,Dream,
+    SamFrank,Technoblade,RyanTrhan,Stellar,DJCook,AnthonyMadia,AnthonyIlla,SmoshGaming,SmoshPit,SmoshCast,
+    Fred,cellardoor,BriansBlog,CellarDoor,AJWorld,Packzilla,LearnJSwithBrian,#SilusGamingWorld,
+    #LearnJSwithBrian,Learn,JavaScript,with,Brian,#Silus,#Gaming,#World">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="robots" content="index, follow">
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Crazy Jigsaw Puzzle</title>
-    <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="manifest.json">
+  <title>UFO Scroll Timeline (UFO/ET)</title>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="canonical" href="https://UFO-Scroll-Timeline.bauska.org">
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+  <link rel="stylesheet" href="./css/styles.css">
 
-  </head>
-    
-  <body>
+  <title>Silus Gaming World Crazy Jigsaw Puzzle</title>
+
+  <!-- favicon images for apple, android and microsoft -->
+  <link rel="shortcut icon" type="image/jpg" href="/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="./css/styles.css">
+
+</head>
+<body>
   <div id=forPuzzle></div>
-<div id="menu">
-  <p id="controls">close controls</p>
-  <div id="showhide">
-    <hr>
-    <p class="center"><button type="button" id="help">instructions</button></p>
-    <hr>
-    <p class="center">
-      <button type="button" id="default">default image</button>
-      <button type="button" id="load">load image</button>
-    </p>
-    <p class="center"><button type="button" id="show">show image</button></p>
-    <p>rotation: <select id="rotationstep">
-        <option value="0" selected>none</option>
-        <option value="1">2 steps/turn</option>
-        <option value="2">3 steps/turn</option>
-        <option value="3">4 steps/turn</option>
-        <option value="4">6 steps/turn</option>
-        <option value="5">8 steps/turn</option>
-        <option value="6">12 steps/turn</option>
-      </select></p>
-    <p>edge cutout: <select id="shape">
+  <div id="menu">
+    <p id="controls">close controls</p>
+    <div id="showhide">
+      <hr>
+      <p class="center"><button type="button" id="help">instructions</button></p>
+      <hr>
+      <p class="center">
+        <button type="button" id="default">default image</button>
+        <button type="button" id="load">load image</button>
+      </p>
+      <p class="center"><button type="button" id="show">show image</button></p>
+      <p>rotation: <select id="rotationstep">
+          <option value="0" selected>none</option>
+          <option value="1">2 steps/turn</option>
+          <option value="2">3 steps/turn</option>
+          <option value="3">4 steps/turn</option>
+          <option value="4">6 steps/turn</option>
+          <option value="5">8 steps/turn</option>
+          <option value="6">12 steps/turn</option>
+        </select>
+	  </p>
+      <p>edge cutout: <select id="shape">
         <option value="1" selected>classic</option>
         <option value="2">triangle</option>
         <option value="4">polygonal</option>
         <option value="3">other 1</option>
         <option value="5">other 2</option>
-      </select></p>
-    <p>number of pieces: <select id="nbpieces">
+        </select>
+	  </p>
+      <p>number of pieces: <select id="nbpieces">
         <option selected>12</option>
         <option>25</option>
         <option>50</option>
@@ -45,25 +96,29 @@
         <option>200</option>
         <option>500</option>
         <option>1000</option>
-      </select></p>
-    <p>between connected pieces: <select id="drawmode">
+        </select>
+	  </p>
+      <p>between connected pieces: <select id="drawmode">
         <option value="1" selected>thin line</option>
         <option value="2">flat</option>
         <option value="3">bevel</option>
-      </select></p>
-    <p class="center"><button type="button" id="start">start game</button><button type="button" id="stop">stop
-        game</button></p>
-    <hr>
-    <p>storage: <button type="button" id="helpstorage">?</button></p>
-    <p class="center"><button type="button" id="save">save game</button><button type="button" id="restore">restore game</button></p>
-    <hr>
-    <p>file: <button type="button" id="helpfile">?</button></p>
-    <p class="center"><button type="button" id="fsave">save game</button><button type="button" id="frestore">restore game</button></p>
-    <p>save name: <input type="text" id="saveas"><span id="saveext"></span></p>
-  </div> <!-- showhide -->
-</div> <!-- menu -->
-    <script  src="./script.js"></script>
+        </select>
+	  </p>
+      <p class="center"><button type="button" id="start">start game</button><button type="button" id="stop">stop
+        game</button>
+	  </p>
+      <hr>
+      <p>storage: <button type="button" id="helpstorage">?</button></p>
+      <p class="center"><button type="button" id="save">save game</button><button type="button" id="restore">restore game</button></p>
+      <hr>
+      <p>file: <button type="button" id="helpfile">?</button></p>
+      <p class="center"><button type="button" id="fsave">save game</button><button type="button" id="frestore">restore game</button></p>
+      <p>save name: <input type="text" id="saveas"><span id="saveext"></span>
+      </p>
+    </div> <!-- showhide -->
+  </div> <!-- menu -->
+  <script  src="./js/script.js"></script>
 
-  </body>
+</body>
   
 </html>
