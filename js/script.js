@@ -83,18 +83,18 @@ const MATS = [, MATS180, MATS120, MATS90, MATS60, MATS45, MATS30];
 
 //-----------------------------------------------------------------------------
 function isMiniature() {
-  return location.pathname.includes("/fullcpgrid/"); // special for Codepen
+  return location.pathname.includes("/fullcpgrid/"); // special for Codepen.
 }
 //-----------------------------------------------------------------------------
 function alea(min, max) {
-  // random number [min..max[ . If no max is provided, [0..min[
+  // random number [min..max[ . If no max is provided, [0..min[.
 
   if (typeof max == "undefined") return min * mrandom();
   return min + (max - min) * mrandom();
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function intAlea(min, max) {
-  // random integer number [min..max[ . If no max is provided, [0..min[
+  // random integer number [min..max[ . If no max is provided, [0..min[.
 
   if (typeof max == "undefined") {
     max = min;
@@ -124,32 +124,36 @@ function arrayShuffle(array) {
   return array;
 } // arrayShuffle
 //------------------------------------------------------------------------
-/* function below used to generate reproducible sequences of pseudo-random numbers
-        one instance is used to create the details of the shapes of the pieces
-        so that only the seed of the function needs to be saved for save / restore operations of the puzzle.
-        */
-
-/* based on a function found at https://www.grc.com/otg/uheprng.htm
-and customized to my needs
-
-use :
-  x = mMash('1213'); // returns a resettable, reproducible pseudo-random number generator function
-  x = mMash();  // like line above, but uses Math.random() for a seed
-  x();         // returns pseudo-random number in range [0..1[;
-  x.reset();   // re-initializes the sequence with the same seed. Even if Mash was invoked without seed, will generate the same sequence.
-  x.seed;      // retrieves the internal seed actually used. May be useful if no seed or non-string seed provided to Mash
-               be careful : this internal seed is a String, even if it may look like a number. Changing or omitting any single digit will produce a completely different sequence
-  x.intAlea(min, max) returns integer in the range [min..max[ (or [0..min[ if max not provided)
-  x.alea(min, max) returns float in the range [min..max[ (or [0..min[ if max not provided)
+/* function below used to generate reproducible sequences of pseudo-random numbers.
+   one instance is used to create the details of the shapes of the pieces
+   so that only the seed of the function needs to be saved for save / restore operations 
+   of the puzzle.
 */
 
-/*	============================================================================
-            This is based upon Johannes Baagoe's carefully designed and efficient hash
-            function for use with JavaScript.  It has a proven "avalanche" effect such
-            that every bit of the input affects every bit of the output 50% of the time,
-            which is good.	See: http://baagoe.com/en/RandomMusings/hash/avalanche.xhtml
-            ============================================================================
-        */
+/* based on a function found at https://www.grc.com/otg/uheprng.htm 
+and customized to my needs;
+
+use:
+  x = mMash('1213'); // returns a resettable, reproducible pseudo-random number generator function.
+  x = mMash();  // like line above, but uses Math.random() for a seed.
+  x();         // returns pseudo-random number in range [0..1[;
+  x.reset();   // re-initializes the sequence with the same seed. Even if Mash was invoked without seed, 
+                  will generate the same sequence.
+  x.seed;      // retrieves the internal seed actually used. May be useful if no seed or non-string seed 
+                  provided to Mash.
+                  Be careful: this internal x.seed is a String, even if it may look like a number. Changing 
+                  or omitting any single digit will produce a completely different sequence.
+  x.intAlea(min, max) // returns integer in the range [min..max[ (or [0..min[ if max not provided).
+  x.alea(min, max) // returns float in the range [min..max[ (or [0..min[ if max not provided).
+*/
+
+/* ============================================================================
+   This is based upon Johannes Baagoe's carefully designed and efficient hash
+   function for use with JavaScript.  It has a proven "avalanche" effect such
+   that every bit of the input affects every bit of the output 50% of the time,
+   which is good.  See: http://baagoe.com/en/RandomMusings/hash/avalanche.xhtml
+   ============================================================================
+*/
 /* Seed may be almost anything not evaluating to false. */
 function mMash(seed) {
   let n = 0xefc8249d;
@@ -170,10 +174,10 @@ function mMash(seed) {
       }
       return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
     } else n = 0xefc8249d;
-  }
-  mash(intSeed); // initial value based on seed
+  }  /* function mash(data) */
+  mash(intSeed); // initial value based on seed.
 
-  let mmash = () => mash("A"); // could as well be 'B' or '!' or any non falsy value
+  let mmash = () => mash("A"); // could as well be 'B' or '!' or any non falsy value.
   mmash.reset = () => {
     mash();
     mash(intSeed);
@@ -194,7 +198,7 @@ function mMash(seed) {
   };
 
   return mmash;
-} // mMash
+} /* function mMash(seed). */
 
 //------------------------------------------------------------------------
 async function saveFile(data, fileName) {
@@ -230,7 +234,7 @@ async function saveFile(data, fileName) {
     if (err.name == "AbortError") return; // no message required if user cancelled
     popup(["Something went wrong saving your game.", `Error message: ${err}`]);
   }
-} // saveFile
+} /* function saveFile(data, filename). */
 //------------------------------------------------------------------------
 function download(data, fileName, options = {}) {
   /* data (string) containing the data to record
@@ -258,10 +262,8 @@ function download(data, fileName, options = {}) {
   element.addEventListener("click", (e) => e.stopPropagation());
   element.click();
   document.body.removeChild(element);
-} // download
-
+} /* function download(data, fileName, options = {}) */
 //------------------------------------------------------------------------
-
 class Modal {
   constructor(properties) {
     // properties : {lines, buttons}
@@ -304,7 +306,7 @@ class Modal {
     document.body.append(modal);
     modal.showModal();
   } // constructor
-} // class Modal
+} /* class Modal */
 
 function popup(lines) {
   // basic Modal with lines of text, and a "close" button - no callback
@@ -312,17 +314,17 @@ function popup(lines) {
     lines: lines,
     buttons: [{ text: "close" }]
   });
-} // popup
+} /* function popup(lines) */
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 // User Interface (controls)
 //------------------------------------------------------------------------
 function prepareUI() {
-  // toggle menu handler
+  // toggle menu handler.
   let menu = document.getElementById("menu");
   let controls = document.getElementById("controls");
 
-  ui = {}; // User Interface HTML elements
+  ui = {}; // User Interface HTML elements.
 
   [
     "default",
@@ -369,7 +371,7 @@ function prepareUI() {
     ui.fsave.setAttribute("disabled", "");
     ui.frestore.removeAttribute("disabled");
     ui.show.setAttribute("disabled", "");
-  };
+  };  /* ui.wating */
   ui.playing = () => {
     ui.default.setAttribute("disabled", "");
     ui.load.setAttribute("disabled", "");
@@ -383,14 +385,14 @@ function prepareUI() {
     ui.fsave.removeAttribute("disabled");
     ui.frestore.setAttribute("disabled", "");
     ui.show.removeAttribute("disabled");
-  };
+  };  /* ui.playing */
 
   ui.saveext.innerHTML = fileExtension;
   controls.addEventListener("click", () => {
     // toggle open/close
     if (menu.classList.contains("hidden")) ui.open();
     else ui.close();
-  });
+  });  /* ui.saveext.innerHTML */
 
   ui.default.addEventListener("click", loadInitialFile);
   ui.load.addEventListener("click", loadFile);
@@ -412,7 +414,6 @@ function prepareUI() {
 }
 //-----------------------------------------------------------------------------
 //------------------------------------------------------------------------
-
 function generatePoints(t) {
   return t.points.map((p) => {
     let obj = { x: p.x, y: p.y }; // shallow copy
@@ -420,41 +421,40 @@ function generatePoints(t) {
     if (p.isEdge) obj.isEdge = true;
     return obj;
   });
-} // generate points
-
+} /* function generatePoints(t) */
 //------------------------------------------------------------------------
-
 class SortedArray {
-  /* creates a sorted array of any kind of things, by intersting them into an initially empty array
-               the comparison function used for sorting is given to the constructor
-               Things are inserted using .insert method
-               sorted array is in the .tb property of the instance
-            */
+  /* Creates a sorted array of any kind of things, by intersting them into an initially 
+     empty array the comparison function used for sorting is given to the constructor.
+	 Things are inserted using .insert method sorted array is in the .tb property of the 
+	 instance.
+  */
   /*
-            the indexOf property lets you know if thing already existed according to fCompar, and at what index
-            just use doInsert(no parameters) after indexOf to insert thing at found (not -1) index
-            */
+     The indexOf property lets you know if thing already existed according to fCompar, and 
+	 at what index just use doInsert(no parameters) after indexOf to insert thing at found 
+	 (not -1) index.
+  */
 
-  /* CAUTION : if duplicates are allowed, indexOf is NOT garanteed to return the index of actual thing - only a thing
-                  which returns 0 when compared with given thing. Use regular Array.indexOf on instance.tb instead.
-            */
+  /* CAUTION : if duplicates are allowed, indexOf is NOT garanteed to return the index of 
+     actual thing - only a thing which returns 0 when compared with given thing. Use regular 
+	 Array.indexOf on instance.tb instead.
+  */
   constructor(fCompar, keepDuplicates = false) {
-    /* fCompar is the function which will be called to compare the things that will be inserted
-                in  this.tb
-                    fCompar(a,b) must return  number < 0 if a must be placed before b
-                    == 0 if a and b are considered equal
-                    > 0 if a must be placed after b
-                */
+    /* fCompar is the function which will be called to compare the things that will 
+	   be inserted in  this.tb
+       fCompar(a,b) must return  number < 0 if a must be placed before b == 0 if a 
+	   and b are considered equal > 0 if a must be placed after b
+    */
     this.tb = [];
     this.fCompar = fCompar;
     this.keepDuplicates = keepDuplicates;
-  }
+  }  /* constructor(fCompar, keepDuplicates = false) */
 
   indexOf(thing) {
     this.thing = thing;
-    // search for place to insert thing, using comparison function this.fCompar
-    // if found, returns the index of thing in this.tb, else returns -1
-    // sets this.insertAt for future insertion
+    // search for place to insert thing, using comparison function this.fCompar.
+    // if found, returns the index of thing in this.tb, else returns -1.
+    // sets this.insertAt for future insertion.
 
     let cmp;
     if (this.tb.length == 0) {
@@ -490,9 +490,9 @@ class SortedArray {
             return -1;
           }
           c = b; // search (a, b) now
-      }
+      }  /* switch (true) */
     } while (true);
-  } // indexOf
+  } /* indexOf */
 
   doInsert() {
     // DO NOT CALL TWICE WITHOUT getting new (!= -1) indexOf
@@ -504,7 +504,7 @@ class SortedArray {
     if (this.indexOf(thing) != -1 && !this.keepDuplicates) return; // already exists and refused
     this.tb.splice(this.insertAt, 0, thing);
   }
-} // class SortedArray
+} /* class SortedArray */
 //------------------------------------------------------------------------
 class Edge {
   constructor(p0, p1) {
@@ -601,19 +601,19 @@ class Triangle {
 } // Triangle
 //------------------------------------------------------------------------
 class Delaunay {
-  /* Delaunay based on based on https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
+  /* Delaunay based on https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
    */
   constructor(points, rect) {
     let triangulation, badTriangles, polygon;
     /*
-                rect is a rectangle which contains all the points
-                */
+       rect is a rectangle which contains all the points
+    */
 
-    /*   triangulation := empty triangle mesh data structure*/
+    /* triangulation := empty triangle mesh data structure*/
     /* add super-triangle to triangulation // must be large enough to completely contain all the points in pointList */
     /*
-                /!\ CAUTION : all triangles generated will have the same orientation as this initial super-triangle
-                */
+       /!\ CAUTION : all triangles generated will have the same orientation as this initial super-triangle
+    */
     const numPts = points.length;
 
     const pts = points; // .map((p, kp) => ({ x: p.x, y: p.y, kp })); // array of points - future vertices
@@ -627,22 +627,23 @@ class Delaunay {
     triangulation = [new Triangle(...supert)];
 
     /*
-                   for each point in pointList do // add all the points one at a time to the triangulation
-                */
+       for each point in pointList do // add all the points one at a time to the triangulation
+    */
     for (let kp = 0; kp < numPts; ++kp) {
       let point = pts[kp];
 
-      /*
-                          badTriangles := empty set
-                    */
+    /*
+      badTriangles := empty set
+    */
       badTriangles = [];
-      /*
-                          for each triangle in triangulation do // first find all the triangles that are no longer valid due to the insertion
-                    */
+    /*
+       for each triangle in triangulation do // first find all the triangles that are no longer 
+	   valid due to the insertion.
+    */
       for (let kt = 0; kt < triangulation.length; ++kt) {
         if (triangulation[kt].inCircumCircle(point))
           badTriangles.push(triangulation[kt]);
-      } // for kt
+      } /* for kt */
 
       polygon = [];
       for (let kt = 0; kt < badTriangles.length; ++kt) {
@@ -696,10 +697,9 @@ class Delaunay {
     }
 
     this.triangulation = triangulation;
-  } // constructor
+  } /* constructor(points, rect) */
 
   //------------------------------------------------------------------------
-
   analyze() {
     this.points.forEach((p) => {
       p.tris = [];
@@ -731,7 +731,6 @@ class Delaunay {
     });
 
     /* sort triangles around every point */
-
     this.points.forEach((p) => {
       const newEdges = [];
       const newTris = [];
@@ -783,7 +782,7 @@ class Delaunay {
     });
   } // drawEdges
   //------------------------------------------------------------------------
-} // Delaunay
+} /* class Delaunay */
 //------------------------------------------------------------------------
 class RdPoint {
   constructor(parent, x, y) {
@@ -798,16 +797,16 @@ class RdPoint {
   distance(p) {
     return mhypot(this.x - p.x, this.y - p.y);
   } // distance
-} // RdPoint
+} /* class RdPoint */
 //------------------------------------------------------------------------
 class RandomPoints {
   constructor(rect, dist, nbTries) {
     /*
-                rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}
-                p0 and p1 are defined by x and y coordinates
-                creates a set of points in rect with a minimum distance of dist
-                nbTries is a heuristic parameter.
-                 */
+       rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}
+       p0 and p1 are defined by x and y coordinates
+       creates a set of points in rect with a minimum distance of dist
+       nbTries is a heuristic parameter.
+    */
 
     const genValues = (range) => {
       // generates a list of values from 0 to range, separated by at least this.dist
@@ -826,13 +825,13 @@ class RandomPoints {
         currv = futv;
         if (range - currv < 2 * dist) return list; //
       } // while true
-    }; // genValues
+    }; /* const genValues */
 
     this.rect = rect;
     this.dist = dist;
     this.nbTries = nbTries;
 
-    // create a grid with the right dimensions
+    // create a grid with the right dimensions.
     this.square = this.dist;
     this.nbx = mceil((rect.p1.x - rect.p0.x) / this.square);
     this.nby = mceil((rect.p1.y - rect.p0.y) / this.square);
@@ -846,8 +845,8 @@ class RandomPoints {
 
     const list = []; // used temporarily to construct points :
     this.list = list;
-    // initialize list with points on the perimeter and corners
-    // points will be added turning clockwise, which will be useful later to create Polygons on the edges
+    // initialize list with points on the perimeter and corners.
+    // points will be added turning clockwise, which will be useful later to create Polygons on the edges.
 
     let l = genValues(rect.p1.x - rect.p0.x); // along horizontal top side
     l.forEach((v) =>
@@ -859,12 +858,12 @@ class RandomPoints {
       this.isAcceptable(new RdPoint(this, rect.p1.x, rect.p0.y + v))
     );
 
-    l = genValues(rect.p1.x - rect.p0.x); // along horizontal bottom side
+    l = genValues(rect.p1.x - rect.p0.x); // along horizontal bottom side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p1.x - v, rect.p1.y))
     );
 
-    l = genValues(rect.p1.y - rect.p0.y); // along vertical left side
+    l = genValues(rect.p1.y - rect.p0.y); // along vertical left side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p0.x, rect.p1.y - v))
     );
@@ -900,7 +899,7 @@ class RandomPoints {
       delete p.kx; // no longer needed
       delete p.ky;
     });
-  } // constructor
+  } /* constructor(rect, dist, nbTries) */
 
   rndr2r() {
     /* returns a random point at a distance from origin between this.dist and 2 * this.dist
@@ -911,7 +910,7 @@ class RandomPoints {
     const r = this.dist * (1 + 0.7 * rnd); // rnd ^ 2 : higher density at lower radius
     const th = Math.PI * puzzle.prng() * 2;
     return { x: r * Math.cos(th), y: r * Math.sin(th) };
-  } // rndr2r
+  } /* rndr2r */
 
   isAcceptable(p) {
     if (
