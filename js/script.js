@@ -2363,7 +2363,8 @@ let loadSaved;
 } //  // scope for loadSaved
 
 function loadInitialFile() {
-  let defaultImage = "https://assets.codepen.io/2574552/Mona_Lisa.jpg";
+/*  let defaultImage = "https://assets.codepen.io/2574552/Mona_Lisa.jpg"; */
+  let defaultImage = "../images/Mona_Lisa.jpg";
   puzzle.imageLoaded = false;
   loadRemoteFile(defaultImage);
   makeSaveFileName(defaultImage);
