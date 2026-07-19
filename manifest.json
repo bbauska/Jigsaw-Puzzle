@@ -1,8 +1,9 @@
 {
   "name": "Jigsaw Puzzle",
   "short_name": "Puzzle", 
-  "start_url": "puzzle.bauska.org",
-  "display": "standalone", "icons": [
+  "start_url": "./index.html",
+  "display": "standalone", 
+  "icons": [
   {
    "src": "\/images/android-icon-36x36.png",
    "sizes": "36x36",
