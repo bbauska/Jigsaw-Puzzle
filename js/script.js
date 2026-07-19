@@ -426,24 +426,24 @@ function generatePoints(t) {
 class SortedArray {
   /* Creates a sorted array of any kind of things, by intersting them into an initially 
      empty array the comparison function used for sorting is given to the constructor.
-	 Things are inserted using .insert method sorted array is in the .tb property of the 
-	 instance.
+     Things are inserted using .insert method sorted array is in the .tb property of the 
+     instance.
   */
   /*
      The indexOf property lets you know if thing already existed according to fCompar, and 
-	 at what index just use doInsert(no parameters) after indexOf to insert thing at found 
-	 (not -1) index.
+     at what index just use doInsert(no parameters) after indexOf to insert thing at found 
+     (not -1) index.
   */
 
   /* CAUTION : if duplicates are allowed, indexOf is NOT garanteed to return the index of 
      actual thing - only a thing which returns 0 when compared with given thing. Use regular 
-	 Array.indexOf on instance.tb instead.
+     Array.indexOf on instance.tb instead.
   */
   constructor(fCompar, keepDuplicates = false) {
     /* fCompar is the function which will be called to compare the things that will 
-	   be inserted in  this.tb
-       fCompar(a,b) must return  number < 0 if a must be placed before b == 0 if a 
-	   and b are considered equal > 0 if a must be placed after b
+       be inserted in this.tb
+       fCompar(a,b) must return number < 0 if a must be placed before b == 0 if a 
+       and b are considered equal > 0 if a must be placed after b
     */
     this.tb = [];
     this.fCompar = fCompar;
@@ -483,7 +483,7 @@ class SortedArray {
           return b; // found !
 
         default:
-          //thing before b
+          // thing before b
           if (b == a) {
             // before a
             this.insertAt = a;
@@ -609,7 +609,7 @@ class Delaunay {
        rect is a rectangle which contains all the points
     */
 
-    /* triangulation := empty triangle mesh data structure*/
+    /* triangulation := empty triangle mesh data structure */
     /* add super-triangle to triangulation // must be large enough to completely contain all the points in pointList */
     /*
        /!\ CAUTION : all triangles generated will have the same orientation as this initial super-triangle
@@ -638,7 +638,7 @@ class Delaunay {
       badTriangles = [];
     /*
        for each triangle in triangulation do // first find all the triangles that are no longer 
-	   valid due to the insertion.
+       valid due to the insertion.
     */
       for (let kt = 0; kt < triangulation.length; ++kt) {
         if (triangulation[kt].inCircumCircle(point))
@@ -653,7 +653,7 @@ class Delaunay {
             (othertri) => othertri !== tri && othertri.hasEdge(tri.a, tri.b)
           )
         )
-          polygon.push([tri.a, tri.b]);
+        polygon.push([tri.a, tri.b]);
         if (
           !badTriangles.some(
             (othertri) => othertri !== tri && othertri.hasEdge(tri.b, tri.c)
@@ -695,10 +695,8 @@ class Delaunay {
         continue;
       }
     }
-
     this.triangulation = triangulation;
   } /* constructor(points, rect) */
-
   //------------------------------------------------------------------------
   analyze() {
     this.points.forEach((p) => {
@@ -787,8 +785,8 @@ class Delaunay {
 class RdPoint {
   constructor(parent, x, y) {
     /*
-                parent is the RandomPoints object for which these RdPoints are constructed
-                */
+      parent is the RandomPoints object for which these RdPoints are constructed
+    */
     this.x = x;
     this.y = y;
     this.kx = Math.floor((x - parent.rect.p0.x) / parent.square);
@@ -802,10 +800,10 @@ class RdPoint {
 class RandomPoints {
   constructor(rect, dist, nbTries) {
     /*
-       rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}
-       p0 and p1 are defined by x and y coordinates
-       creates a set of points in rect with a minimum distance of dist
-       nbTries is a heuristic parameter.
+      rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}
+      p0 and p1 are defined by x and y coordinates
+      creates a set of points in rect with a minimum distance of dist
+      nbTries is a heuristic parameter.
     */
 
     const genValues = (range) => {
@@ -1003,11 +1001,11 @@ class Polygon {
 
 function makeSaveFileName(src) {
   /* builds a name suitable for a file (without extension) base on input string.
-            the input string is supposed to be an url with a "http" or "https" protocol, or a text that can reasonably be converted to a filename
-            if it is an url, it is parsed to keep the last portion of its path name (after the last "/")
-            the extension part (after the last "." if any) is stripped
-            this names is copied to the user interface "save name" input field
-            */
+     the input string is supposed to be an url with a "http" or "https" protocol, or a text that 
+	 can reasonably be converted to a filename if it is an url, it is parsed to keep the last 
+	 portion of its path name (after the last "/") the extension part (after the last "." if any) 
+	 is stripped this names is copied to the user interface "save name" input field
+  */
   if (URL.canParse(src)) {
     src = URL.parse(src).pathname;
     // keep last part of pathname
@@ -1098,15 +1096,13 @@ class Side {
     ns.points = this.points.slice().reverse();
     return ns;
   } // Side.reversed
-
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   /*
-            draws the path corresponding to a side
-            Parameters :
-              path : path2D or ctx where the path will be drawn
-              first : true to begin with moveTo, false to continue already begun path
-            */
+    draws the path corresponding to a side
+    Parameters :
+      path : path2D or ctx where the path will be drawn
+      first : true to begin with moveTo, false to continue already begun path
+  */
   drawNormPath(path, first) {
     // raw draw in path
     if (first) {
@@ -1131,8 +1127,8 @@ class Side {
 } // class Side
 //-----------------------------------------------------------------------------
 /* modifies a side
-  changes it from a straight line (type "d") to a complex one (type "z")
-  The change is done towards the opposite vertex (ca)
+   changes it from a straight line (type "d") to a complex one (type "z")
+   The change is done towards the opposite vertex (ca)
 */
 function twist0(side, ca) {
   const sp = side.points;
@@ -1231,9 +1227,9 @@ function twist0(side, ca) {
 } // twist0
 //-----------------------------------------------------------------------------
 /* modifies a side
-          changes it from a straight line (type "d") to a complex one (type "z")
-          The change is done towards point ca
-        */
+   changes it from a straight line (type "d") to a complex one (type "z")
+   The change is done towards point ca
+*/
 function twist1(side, ca) {
   const sp = side.points;
 
@@ -1245,7 +1241,7 @@ function twist1(side, ca) {
 
   const dxv = ca.x - mid0.x;
   const dyv = ca.y - mid0.y;
-  //            const lsegv = mhypot(dxv, dyv);
+  // const lsegv = mhypot(dxv, dyv);
 
   const pa = pointAt(
     puzzle.prng.alea(0.15, 0.35),
@@ -1283,16 +1279,16 @@ function twist1(side, ca) {
 } // twist1
 //-----------------------------------------------------------------------------
 /* modifies a side
-          changes it from a straight line (type "d") to a complex one (type "z")
-          The change is done towards point ca
-        */
+   changes it from a straight line (type "d") to a complex one (type "z")
+   The change is done towards point ca
+*/
 function twist2(side, ca) {
   const sp = side.points;
 
   const dxh = sp[1].x - sp[0].x;
   const dyh = sp[1].y - sp[0].y;
-  //            const lsegh = mhypot(dxh, dyh);
-  //            if (lsegh < (puzzle.distPoints * 0.4)) return; // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
+  // const lsegh = mhypot(dxh, dyh);
+  // if (lsegh < (puzzle.distPoints * 0.4)) return; // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
   const mid0 = lerp(sp[0], sp[1], 0.5);
 
   const dxv = ca.x - mid0.x;
@@ -1317,8 +1313,8 @@ function twist2(side, ca) {
 } // twist2
 //-----------------------------------------------------------------------------
 /* modifies a side
-        this one does not, in fact
-        */
+   this one does not, in fact
+*/
 function twist3() {} // twist3
 
 //-----------------------------------------------------------------------------
@@ -1370,11 +1366,11 @@ class PolyPiece {
 
   // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -
   /*
-              this method
-                - adds pieces of otherPoly to this PolyPiece
-                - adjusts coordinates of new pieces to make them consistent with this polyPiece
-                - re-evaluates the z - index of the polyPieces
-            */
+    this method
+      - adds pieces of otherPoly to this PolyPiece
+      - adjusts coordinates of new pieces to make them consistent with this polyPiece
+      - re-evaluates the z - index of the polyPieces
+  */
 
   merge(otherPoly) {
     // remove otherPoly from list of polypieces
@@ -1427,13 +1423,12 @@ class PolyPiece {
   } // ifNear
 
   // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
-
   /* algorithm to determine the boundary of a PolyPiece
-              input : a table of cells, hopefully defining a 'good' PolyPiece, i.e. all connected together
-              returned value : table of Loops, because the boundary may be made of several
-            simple loops : there may be a 'hole' in a PolyPiece
-            every loop is a list of consecutive sides
-            */
+     input : a table of cells, hopefully defining a 'good' PolyPiece, i.e. all connected together
+     returned value : table of Loops, because the boundary may be made of several
+     simple loops : there may be a 'hole' in a PolyPiece
+     every loop is a list of consecutive sides
+  */
 
   listLoops() {
     const tbLoops = []; // for the result
@@ -1507,7 +1502,6 @@ class PolyPiece {
       this.y
     );
   } // setTransforms
-
   // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
   drawImage(special) {
@@ -1637,17 +1631,16 @@ class PolyPiece {
 //-----------------------------------------------------------------------------
 class Puzzle {
   /*
-                params contains :
+    params contains:
+      container : mandatory - given by id (string) or element
+                              it will not be resized in this script
 
-            container : mandatory - given by id (string) or element
-                        it will not be resized in this script
-
-            ONLY ONE Puzzle object should be instanced.
-                only "container is mandatory, nbPieces and pictures may be provided to get
-                initial default values.
-                When a puzzle is solved (and even if not solved) another game can be played
-                by changing the image file or the number of pieces, NOT by invoking new Puzzle
-            */
+      ONLY ONE Puzzle object should be instanced.
+      only "container is mandatory, nbPieces and pictures may be provided to get
+      initial default values.
+      When a puzzle is solved (and even if not solved) another game can be played
+      by changing the image file or the number of pieces, NOT by invoking new Puzzle
+  */
 
   constructor(params) {
     this.autoStart = false;
@@ -1658,9 +1651,9 @@ class Puzzle {
         : params.container;
 
     /* the following code will add the event Handlers several times if
-                  new Puzzle objects are created with same container.
-                  the presence of previous event listeners is NOT detectable
-                */
+       new Puzzle objects are created with same container.
+       the presence of previous event listeners is NOT detectable
+    */
     this.container.addEventListener("mousedown", (event) => {
       useMouse = true;
       event.preventDefault();
@@ -1934,12 +1927,9 @@ class Puzzle {
   } // drawPolyPieces
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   defineShapes(shapeDesc) {
     let { coeffDecentr, twistf } = shapeDesc;
-
     let np;
-
     for (const piece of this.pieces) {
       piece.sideLines = [];
       piece.sides.forEach((side, k) => {
@@ -1964,7 +1954,6 @@ class Puzzle {
   } // Puzzle.defineShapes
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   doScale() {
     /* computes the distance below which two pieces connect
                   depends on the actual size of pieces, with lower limit */
@@ -2017,7 +2006,8 @@ class Puzzle {
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   relativeMouseCoordinates(event) {
     /* takes mouse coordinates from mouse event
-                  returns coordinates relative to container, even if page is scrolled or zoommed */
+       returns coordinates relative to container, even if page is scrolled or zoommed 
+	*/
 
     const br = this.container.getBoundingClientRect();
     lastMousePos = {
@@ -2031,8 +2021,8 @@ class Puzzle {
   spread() {
     // calculates how to spread pieces
     /* pieces are spreaded in a grid ngx * ngy cells, each of size = kSpread * this.distPoints
-                 a rectangular space is reserved for the image, with a margin around it
-                */
+       a rectangular space is reserved for the image, with a margin around it
+    */
 
     let kSpread = 1.7; // center-to-center distance of spreaded pieces,
     let kMargin = 1.7; // empty space around piece
@@ -2093,12 +2083,11 @@ class Puzzle {
     } // for ky
   } // spread
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   evaluateOrder() {
     /* re-evaluates order of polypieces in puzzle after a merge
-                  the polypieces must be in decreasing order of size(number of pieces),
-                  preserving the previous order as much as possible
-                */
+       the polypieces must be in decreasing order of size(number of pieces),
+       preserving the previous order as much as possible
+    */
     for (let k = this.polyPieces.length - 1; k > 0; --k) {
       if (
         this.polyPieces[k].pieces.length > this.polyPieces[k - 1].pieces.length
@@ -2114,11 +2103,11 @@ class Puzzle {
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   getStateData() {
     /* gathers all required data so that game can be saved and restored
-                 the data included here only comprises the information for the position and the shape of the PolyPieces
-                 The source of the picture is included too, as a link ("https://...") or a data URL
-                To avoid the clutter of field names in JSON strings, all data saved here will be put in an array, and this array
-                 will be included in the final object as a "base" field
-                */
+       the data included here only comprises the information for the position and the shape of the PolyPieces
+       The source of the picture is included too, as a link ("https://...") or a data URL
+       To avoid the clutter of field names in JSON strings, all data saved here will be put in an array, and this array
+       will be included in the final object as a "base" field
+    */
     let ppData;
     let saved = { signature: fileSignature };
     if ("origin" in this.srcImage.dataset) {
@@ -2279,7 +2268,6 @@ class Puzzle {
   } // makePolygons
 } // class Puzzle
 //-----------------------------------------------------------------------------
-
 let loadFile;
 {
   // scope for loadFile
@@ -2398,9 +2386,9 @@ function imageLoaded() {
 //-----------------------------------------------------------------------------
 function fitImage(img, width, height) {
   /* The image is a child of puzzle.container. It will be styled to be as big as possible, not wider than width,
-            not higher than height, centered in puzzle.container
-            (width and height must be less than or equal to the container dimensions)
-            */
+     not higher than height, centered in puzzle.container
+     (width and height must be less than or equal to the container dimensions)
+  */
 
   let wn = img.naturalWidth;
   let hn = img.naturalHeight;
@@ -2571,7 +2559,7 @@ let events = []; // queue for events
 
             if (pp.isPointInPath(event.position)) {
               pp.selected = true;
-              //                                    pp.drawImage();
+              // pp.drawImage();
               moving.pp = pp;
               moving.ppXInit = pp.x;
               moving.ppYInit = pp.y;
@@ -2580,7 +2568,7 @@ let events = []; // queue for events
               puzzle.polyPieces.push(pp);
               pp.isMoving = true;
               puzzle.drawPolyPieces();
-              //                                    pp.canvas.style.zIndex = puzzle.zIndexSup; // to foreground
+              // pp.canvas.style.zIndex = puzzle.zIndexSup; // to foreground
               state = 55;
               return;
             }
@@ -2835,7 +2823,6 @@ let events = []; // queue for events
             state = 15; // silently ignore if something wrong
             break;
           }
-
           state = 155;
         }
         break;
@@ -2894,7 +2881,8 @@ let events = []; // queue for events
           state = 10; // give up after 5s
         }
         break;
-      case 160:
+
+	  case 160:
         tmpImage.src = puzzle.srcImage.src;
         fitImage(tmpImage, puzzle.contWidth * 0.95, puzzle.contHeight * 0.95);
         state = 20; // step 20 will use puzzle.restoredState.base to re-create saved game
@@ -2907,7 +2895,6 @@ let events = []; // queue for events
 } // scope for animate
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
 prepareUI();
 
 window.addEventListener("resize", (event) => {
