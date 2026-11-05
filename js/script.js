@@ -1,6 +1,7 @@
 /* ./js/script.js of jigsaw-puzzle for puzzle.bauska.org */
 "use strict";
-// last update: 2026/02/26
+// prior update: 2026/02/26
+// last update: 2026/11/05
 let puzzle, autoStart;
 let playing;
 let useMouse = true;
@@ -81,18 +82,18 @@ const MATS30 = [
 
 const MATS = [, MATS180, MATS120, MATS90, MATS60, MATS45, MATS30];
 
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function isMiniature() {
   return location.pathname.includes("/fullcpgrid/"); // special for Codepen.
 }
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function alea(min, max) {
   // random number [min..max[ . If no max is provided, [0..min[.
 
   if (typeof max == "undefined") return min * mrandom();
   return min + (max - min) * mrandom();
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//-------------------------------------------------------------------------------------------------
 function intAlea(min, max) {
   // random integer number [min..max[ . If no max is provided, [0..min[.
 
@@ -109,11 +110,11 @@ function lerp(p0, p1, alpha) {
     y: p0.y * (1 - alpha) + p1.y * alpha
   };
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//-------------------------------------------------------------------------------------------------
 function arrayShuffle(array) {
-  /* randomly changes the order of items in an array
-            only the order is modified, not the elements
-            */
+/* randomly changes the order of items in an array
+   only the order is modified, not the elements
+*/
   let k1, temp;
   for (let k = array.length - 1; k >= 1; --k) {
     k1 = puzzle.prng.intAlea(0, k + 1);
@@ -123,7 +124,7 @@ function arrayShuffle(array) {
   } // for k
   return array;
 } // arrayShuffle
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /* function below used to generate reproducible sequences of pseudo-random numbers.
    one instance is used to create the details of the shapes of the pieces
    so that only the seed of the function needs to be saved for save / restore operations 
@@ -200,7 +201,7 @@ function mMash(seed) {
   return mmash;
 } /* function mMash(seed). */
 
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 async function saveFile(data, fileName) {
   if (!("showSaveFilePicker" in window) || window.top !== window.self) {
     // showSaveFilePicker, use old donload method
@@ -235,20 +236,21 @@ async function saveFile(data, fileName) {
     popup(["Something went wrong saving your game.", `Error message: ${err}`]);
   }
 } /* function saveFile(data, filename). */
-//------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------
 function download(data, fileName, options = {}) {
   /* data (string) containing the data to record
-               filename (string) the name to give to the file
-            */
-
+     filename (string) the name to give to the file
+  */
+//-------------------------------------------------------------------------------------------------
   /* Based on code found in a pen by Johann Karlsson https://codepen.io/DonKarlssonSan */
   /* proposes to the user to save a file containing data from the program. */
 
   let mediaType = ""; // no type results in text/plain;charset=US-ASCII
   if (typeof options.mediaType == "string") mediaType = options.mediaType;
+
   /* mediaType MUST include ';base64' if provided data is base64-encoded. */
   /* mediaType DOES NOT end with a ',' character (appended in program). */
-
   let preEncoded = false;
   if (typeof options.preEncoded == "boolean") preEncoded = options.preEncoded;
 
@@ -263,6 +265,7 @@ function download(data, fileName, options = {}) {
   element.click();
   document.body.removeChild(element);
 } /* function download(data, fileName, options = {}) */
+
 //------------------------------------------------------------------------
 class Modal {
   constructor(properties) {
@@ -315,10 +318,10 @@ function popup(lines) {
     buttons: [{ text: "close" }]
   });
 } /* function popup(lines) */
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------
 // User Interface (controls)
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function prepareUI() {
   // toggle menu handler.
   let menu = document.getElementById("menu");
@@ -412,8 +415,7 @@ function prepareUI() {
   ui.helpfile.addEventListener("click", () => popup(helpfiletext));
   ui.show.addEventListener("click", () => puzzle.showImage(true));
 }
-//-----------------------------------------------------------------------------
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function generatePoints(t) {
   return t.points.map((p) => {
     let obj = { x: p.x, y: p.y }; // shallow copy
@@ -422,7 +424,7 @@ function generatePoints(t) {
     return obj;
   });
 } /* function generatePoints(t) */
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class SortedArray {
   /* Creates a sorted array of any kind of things, by intersting them into an initially 
      empty array the comparison function used for sorting is given to the constructor.
@@ -505,7 +507,7 @@ class SortedArray {
     this.tb.splice(this.insertAt, 0, thing);
   }
 } /* class SortedArray */
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class Edge {
   constructor(p0, p1) {
     if (p0.kp <= p1.kp) {
@@ -560,7 +562,7 @@ class Edge {
     }
   }
 } // class Edge
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class Triangle {
   constructor(a, b, c) {
     this.a = a;
@@ -599,7 +601,7 @@ class Triangle {
     });
   } // listTris
 } // Triangle
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class Delaunay {
   /* Delaunay based on https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
    */
@@ -697,7 +699,7 @@ class Delaunay {
     }
     this.triangulation = triangulation;
   } /* constructor(points, rect) */
-  //------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
   analyze() {
     this.points.forEach((p) => {
       p.tris = [];
@@ -779,9 +781,9 @@ class Delaunay {
       ctx.stroke();
     });
   } // drawEdges
-  //------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 } /* class Delaunay */
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class RdPoint {
   constructor(parent, x, y) {
     /*
@@ -796,7 +798,7 @@ class RdPoint {
     return mhypot(this.x - p.x, this.y - p.y);
   } // distance
 } /* class RdPoint */
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class RandomPoints {
   constructor(rect, dist, nbTries) {
     /*
@@ -939,7 +941,7 @@ class RandomPoints {
     return true;
   }
 } // RandomPoints
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class Polygon {
   /* this is the class for basic (unconnected) pieces of a puzzle */
   constructor(tr, kp, lastkp) {
@@ -996,15 +998,13 @@ class Polygon {
   } // constructor
 } // class Polygon
 
-//------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
+//-------------------------------------------------------------------------------------------------
 function makeSaveFileName(src) {
   /* builds a name suitable for a file (without extension) base on input string.
      the input string is supposed to be an url with a "http" or "https" protocol, or a text that 
-	 can reasonably be converted to a filename if it is an url, it is parsed to keep the last 
-	 portion of its path name (after the last "/") the extension part (after the last "." if any) 
-	 is stripped this names is copied to the user interface "save name" input field
+     can reasonably be converted to a filename if it is an url, it is parsed to keep the last 
+     portion of its path name (after the last "/") the extension part (after the last "." if any) 
+     is stripped this names is copied to the user interface "save name" input field
   */
   if (URL.canParse(src)) {
     src = URL.parse(src).pathname;
@@ -1034,7 +1034,7 @@ function makeSaveFileName(src) {
   return nname;
 } // makeSaveFileName
 
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function startGame() {
   events.push({ event: "nbpieces", nbpieces: Number(ui.nbpieces.value) });
 }
@@ -1048,16 +1048,20 @@ function confirmStop() {
     ]
   });
 }
-//------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 const helptext = [
   "Thank you for playing my jigsaw puzzle game.",
   "You can play with a default picture, or load any jpeg, png or other kind of picture from your computer.",
-  "Pick a rotation step for the pieces, from none to 12 steps by turn. Rotate the pieces by clicking/tapping them. Pieces will rotate counter-clockwise if the shift key is held down during rotation.",
+  "Pick a rotation step for the pieces, from none to 12 steps by turn. Rotate the pieces by clicking/tapping 
+  them. Pieces will rotate counter-clockwise if the shift key is held down during rotation.",
   "Choose from the different piece shapes available.",
-  "Choose the number of pieces. This is not an accurate value, depending on the dimensions of your picture, the exact number of pieces may be slightly different.",
+  "Choose the number of pieces. This is not an accurate value, depending on the dimensions of your picture, 
+  the exact number of pieces may be slightly different.",
   "You can zoom in and out with the mouse wheel or by pinching, or with the keyboard keys Ctrl + and Ctrl -.",
-  "You can move the whole game at a time in any direction by touching the surface outside of any piece, and moving around. Combined with the zoom feature, this gives you access to a virtually unlimited game area.",
-  "Last, you can save a game in progress, and restore it later. Two methods are proposed, see individual help buttons for details."
+  "You can move the whole game at a time in any direction by touching the surface outside of any piece, and 
+  moving around. Combined with the zoom feature, this gives you access to a virtually unlimited game area.",
+  "Last, you can save a game in progress, and restore it later. Two methods are proposed, see individual help 
+  buttons for details."
 ];
 
 const helpstoragetext = [
@@ -1065,22 +1069,24 @@ const helpstoragetext = [
   "This method is fast - really a one-click action - but with a few drawbacks.",
   "Although it is very popular, this method is not available on some devices.",
   "Only one game can be saved at a time: every saved game replaces the previous one.",
-  "Furthermore, this method can fail, with locally loaded images bigger than a few Mb. A message will be issued in case of failure"
+  "Furthermore, this method can fail, with locally loaded images bigger than a few Mb. A message 
+  will be issued in case of failure"
 ];
 
 const helpfiletext = [
-  'This method stores the saved game in your download folder. Use the "save name" field to save different games with different names.',
-  "On some devices, you are not limited to the download folder: you will be prompted for the destination folder and name."
+  'This method stores the saved game in your download folder. Use the "save name" field to save different 
+  games with different names.',
+  "On some devices, you are not limited to the download folder: you will be prompted for the destination 
+  folder and name."
 ];
-//------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function getTransformMatrix(orgx, orgy, scale, rot, destx, desty) {
   const mat = new DOMMatrix([1, 0, 0, 1, destx, desty]);
   if (rot) mat.multiplySelf(puzzle.rotMat[rot]);
   mat.scaleSelf(scale, scale);
   return mat.translateSelf(-orgx, -orgy);
 } //
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // one side of a piece
 class Side {
   constructor(type, points) {
@@ -1088,7 +1094,7 @@ class Side {
     this.points = points || []; // real points or Bezier curve points
   } // Side
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   reversed() {
     // returns a new Side, copy of current one but reversed
     const ns = new Side();
@@ -1096,7 +1102,7 @@ class Side {
     ns.points = this.points.slice().reverse();
     return ns;
   } // Side.reversed
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   /*
     draws the path corresponding to a side
     Parameters :
@@ -1125,7 +1131,7 @@ class Side {
     } // if jigsaw side
   } // Side.drawNormPath
 } // class Side
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /* modifies a side
    changes it from a straight line (type "d") to a complex one (type "z")
    The change is done towards the opposite vertex (ca)
@@ -1225,7 +1231,7 @@ function twist0(side, ca) {
     };
   } // pointAt
 } // twist0
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /* modifies a side
    changes it from a straight line (type "d") to a complex one (type "z")
    The change is done towards point ca
@@ -1277,7 +1283,7 @@ function twist1(side, ca) {
     };
   } // pointAt
 } // twist1
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /* modifies a side
    changes it from a straight line (type "d") to a complex one (type "z")
    The change is done towards point ca
@@ -1288,7 +1294,8 @@ function twist2(side, ca) {
   const dxh = sp[1].x - sp[0].x;
   const dyh = sp[1].y - sp[0].y;
   // const lsegh = mhypot(dxh, dyh);
-  // if (lsegh < (puzzle.distPoints * 0.4)) return; // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
+  // if (lsegh < (puzzle.distPoints * 0.4)) return; 
+  // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
   const mid0 = lerp(sp[0], sp[1], 0.5);
 
   const dxv = ca.x - mid0.x;
@@ -1311,14 +1318,13 @@ function twist2(side, ca) {
     };
   } // pointAt
 } // twist2
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /* modifies a side
    this one does not, in fact
 */
 function twist3() {} // twist3
 
-//-----------------------------------------------------------------------------
-
+//-------------------------------------------------------------------------------------------------
 function twist4(side, ca, cb) {
   const sp = side.points;
 
@@ -1340,9 +1346,7 @@ function twist4(side, ca, cb) {
   ];
   side.type = "z";
 } // twist4
-
-//--------------------------------------------------------------
-//--------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class PolyPiece {
   // represents a group of pieces well positionned with respect  to each other.
   constructor(initialPiece) {
@@ -1364,7 +1368,7 @@ class PolyPiece {
     this.rot = 0; // PolyPiece is in "normal" position - 1 for 90 deg.cw, 2 and 3 for 180 and 270 deg
   } // PolyPiece.constructor
 
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -
+  //-----------------------------------------------------------------------------------------------
   /*
     this method
       - adds pieces of otherPoly to this PolyPiece
@@ -1399,7 +1403,7 @@ class PolyPiece {
     puzzle.evaluateOrder();
   } // merge
 
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -
+  //-----------------------------------------------------------------------------------------------
   ifNear(otherPoly) {
     if (this.rot != otherPoly.rot) return false; // different orientations, can't collapse!
 
@@ -1418,11 +1422,10 @@ class PolyPiece {
     }
 
     // nothing matches
-
     return false;
   } // ifNear
 
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+  //-----------------------------------------------------------------------------------------------
   /* algorithm to determine the boundary of a PolyPiece
      input : a table of cells, hopefully defining a 'good' PolyPiece, i.e. all connected together
      returned value : table of Loops, because the boundary may be made of several
@@ -1464,7 +1467,7 @@ class PolyPiece {
     } // while tbEdges...
     this.tbLoops = tbLoops;
   } // polyPiece.listLoops
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+  //-----------------------------------------------------------------------------------------------
   getSrcPath() {
     // returns an array of paths defined on a normalized image
     this.srcPath = new Path2D();
@@ -1478,7 +1481,7 @@ class PolyPiece {
     });
     return this.srcPath;
   } // getSrcPath
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+  //-----------------------------------------------------------------------------------------------
   getNormIntPath() {
     // returns a path made of all the internal edges
     this.normIntPath = new Path2D();
@@ -1491,7 +1494,7 @@ class PolyPiece {
     });
     return this.normIntPath;
   } // getNormIntPath
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+  //-----------------------------------------------------------------------------------------------
   setTransforms() {
     this.fromSrcMatrix = getTransformMatrix(
       0,
@@ -1502,8 +1505,8 @@ class PolyPiece {
       this.y
     );
   } // setTransforms
-  // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
+  //-----------------------------------------------------------------------------------------------
   drawImage(special) {
     this.setTransforms(); // may be not the best place to do this.
 
@@ -1628,7 +1631,7 @@ class PolyPiece {
   } // isPointInPath
 } // class PolyPiece
 
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class Puzzle {
   /*
     params contains:
@@ -1762,7 +1765,7 @@ class Puzzle {
     }
   } // Puzzle
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   getContainerSize() {
     let styl = window.getComputedStyle(this.container);
 
@@ -1771,7 +1774,7 @@ class Puzzle {
     this.contHeight = parseFloat(styl.height);
   }
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   showImage(state) {
     // enforces display (true) or hide (false)
     puzzle.showState = state == undefined ? !puzzle.showState : !!state;
@@ -1795,7 +1798,7 @@ class Puzzle {
       showElem.style.display = "none";
     }
   }
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   // used to initialize new or restored game
 
   create(baseData) {
@@ -1919,14 +1922,14 @@ class Puzzle {
     this.evaluateOrder();
   } // Puzzle.create
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   drawPolyPieces(butTop) {
     this.playCtx.clearRect(0, 0, this.playCanvas.width, this.playCanvas.height);
     let max = this.polyPieces.length - (butTop ? 1 : 0);
     for (let k = 0; k < max; ++k) this.polyPieces[k].drawImage();
   } // drawPolyPieces
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   defineShapes(shapeDesc) {
     let { coeffDecentr, twistf } = shapeDesc;
     let np;
@@ -1953,7 +1956,7 @@ class Puzzle {
     } // for piece
   } // Puzzle.defineShapes
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   doScale() {
     /* computes the distance below which two pieces connect
                   depends on the actual size of pieces, with lower limit */
@@ -1967,14 +1970,14 @@ class Puzzle {
     );
     this.polyPieces.forEach((pp) => pp.setTransforms());
   }
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   sweepBy(dx, dy) {
     this.polyPieces.forEach((pp) => {
       pp.moveTo(pp.x + dx, pp.y + dy);
     });
     this.drawPolyPieces();
   } // Puzzle.sweepBy
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
 
   zoomBy(coef, center) {
     // coef if a multiplier coefficient (1= no change, 0..1 = shrink, >1 = enlarge)
@@ -2003,11 +2006,11 @@ class Puzzle {
     });
     this.drawPolyPieces();
   } // Puzzle.zoomBy
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   relativeMouseCoordinates(event) {
     /* takes mouse coordinates from mouse event
        returns coordinates relative to container, even if page is scrolled or zoommed 
-	*/
+    */
 
     const br = this.container.getBoundingClientRect();
     lastMousePos = {
@@ -2017,7 +2020,7 @@ class Puzzle {
     return lastMousePos;
   } // Puzzle.relativeMouseCoordinates
 
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   spread() {
     // calculates how to spread pieces
     /* pieces are spreaded in a grid ngx * ngy cells, each of size = kSpread * this.distPoints
@@ -2082,7 +2085,7 @@ class Puzzle {
       } // for ky;
     } // for ky
   } // spread
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   evaluateOrder() {
     /* re-evaluates order of polypieces in puzzle after a merge
        the polypieces must be in decreasing order of size(number of pieces),
@@ -2100,13 +2103,13 @@ class Puzzle {
       }
     } // for k
   } // Puzzle.evaluateOrder
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   getStateData() {
     /* gathers all required data so that game can be saved and restored
        the data included here only comprises the information for the position and the shape of the PolyPieces
        The source of the picture is included too, as a link ("https://...") or a data URL
-       To avoid the clutter of field names in JSON strings, all data saved here will be put in an array, and this array
-       will be included in the final object as a "base" field
+       To avoid the clutter of field names in JSON strings, all data saved here will be put in an 
+	   array, and this array will be included in the final object as a "base" field.
     */
     let ppData;
     let saved = { signature: fileSignature };
@@ -2134,7 +2137,7 @@ class Puzzle {
     });
     return saved;
   } // getStateData
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //-----------------------------------------------------------------------------------------------
   makePolygons() {
     const distPoints = this.distPoints;
 
@@ -2212,7 +2215,6 @@ class Puzzle {
     });
 
     // define the sides of the polygons, and do not re-create side shared with another polygon
-
     polygons.forEach((poly) => {
       let side, side1;
       const nVert = poly.vertices.length;
@@ -2252,7 +2254,6 @@ class Puzzle {
     });
 
     /* build list of neighbors - for future detection of PolyPieces touching each other */
-
     polygons.forEach((poly) => {
       poly.neighbors = new Set();
       poly.sides.forEach((side) => {
@@ -2267,13 +2268,11 @@ class Puzzle {
     } // center
   } // makePolygons
 } // class Puzzle
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 let loadFile;
 {
   // scope for loadFile
-
   let options;
-
   let elFile = document.createElement("input");
   elFile.setAttribute("type", "file");
   elFile.style.display = "none";
@@ -2362,7 +2361,7 @@ function loadRemoteFile(fileURL) {
   puzzle.srcImage.src = fileURL;
   delete puzzle.srcImage.dataset.origin; // makes difference from locally loaded pictures
 }
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function imageLoaded() {
   puzzle.imageLoaded = true;
   let event = { event: "srcImageLoaded" };
@@ -2383,11 +2382,11 @@ function imageLoaded() {
   events.push(event);
 } // imageLoaded
 
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 function fitImage(img, width, height) {
-  /* The image is a child of puzzle.container. It will be styled to be as big as possible, not wider than width,
-     not higher than height, centered in puzzle.container
-     (width and height must be less than or equal to the container dimensions)
+  /* The image is a child of puzzle.container. It will be styled to be as big as possible, not wider 
+     than width, not higher than height, centered in puzzle.container (width and height must be less 
+	 than or equal to the container dimensions)
   */
 
   let wn = img.naturalWidth;
@@ -2405,7 +2404,7 @@ function fitImage(img, width, height) {
   img.style.left = "50%";
   img.style.transform = "translate(-50%,-50%)";
 }
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 let animate;
 let events = []; // queue for events
 
@@ -2882,7 +2881,7 @@ let events = []; // queue for events
         }
         break;
 
-	  case 160:
+      case 160:
         tmpImage.src = puzzle.srcImage.src;
         fitImage(tmpImage, puzzle.contWidth * 0.95, puzzle.contHeight * 0.95);
         state = 20; // step 20 will use puzzle.restoredState.base to re-create saved game
