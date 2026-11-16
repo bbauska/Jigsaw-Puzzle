@@ -1052,16 +1052,12 @@ function confirmStop() {
 const helptext = [
   "Thank you for playing my jigsaw puzzle game.",
   "You can play with a default picture, or load any jpeg, png or other kind of picture from your computer.",
-  "Pick a rotation step for the pieces, from none to 12 steps by turn. Rotate the pieces by clicking/tapping 
-  them. Pieces will rotate counter-clockwise if the shift key is held down during rotation.",
+  "Pick a rotation step for the pieces, from none to 12 steps by turn. Rotate the pieces by clicking/tapping them. Pieces will rotate counter-clockwise if the shift key is held down during rotation.",
   "Choose from the different piece shapes available.",
-  "Choose the number of pieces. This is not an accurate value, depending on the dimensions of your picture, 
-  the exact number of pieces may be slightly different.",
+  "Choose the number of pieces. This is not an accurate value, depending on the dimensions of your picture, the exact number of pieces may be slightly different.",
   "You can zoom in and out with the mouse wheel or by pinching, or with the keyboard keys Ctrl + and Ctrl -.",
-  "You can move the whole game at a time in any direction by touching the surface outside of any piece, and 
-  moving around. Combined with the zoom feature, this gives you access to a virtually unlimited game area.",
-  "Last, you can save a game in progress, and restore it later. Two methods are proposed, see individual help 
-  buttons for details."
+  "You can move the whole game at a time in any direction by touching the surface outside of any piece, and moving around. Combined with the zoom feature, this gives you access to a virtually unlimited game area.",
+  "Last, you can save a game in progress, and restore it later. Two methods are proposed, see individual help buttons for details."
 ];
 
 const helpstoragetext = [
