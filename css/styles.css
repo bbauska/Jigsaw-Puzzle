@@ -1,4 +1,4 @@
-/* ./css/styles.css of jigsaw-puzzle for puzzle.bauska.org */
+/* ./css/styles.css of Jigsaw-Puzzle for puzzle.bauska.org */
 body {
   font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
   background-color: #fff;  /* white*/
@@ -23,7 +23,6 @@ input {
   background-color: rgba(255, 255, 128, 0.9);  /* light, creamy yellow color with 90% opacity */
   color: black;
 }
-
 #menu.hidden #showhide {
   display: none;
 }
@@ -38,11 +37,9 @@ input {
   margin-left: 5px;
   border-radius: 5px;
 }
-
 #menu .center {
   text-align: center;
 }
-
 #menu button.enhanced {
   background-color: #00ff00;  /* Pure (or mostly pure) lime green */
   border-color: #008800;  /* dark lime green */
