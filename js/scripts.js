@@ -1,7 +1,7 @@
-/* ./js/scripts.js of Jigsaw-Puzzle for puzzle.bauska.org */
+/* ./js/script.js of jigsaw-puzzle for puzzle.bauska.org */
 "use strict";
 
-// Prior update: 2026/02/26, 2026/11/06.
+// Prior update: 2026/02/26, 2026/11/05.
 // Last update: 2026/11/16.
 let puzzle, autoStart;
 let playing;
@@ -85,77 +85,72 @@ const MATS = [, MATS180, MATS120, MATS90, MATS60, MATS45, MATS30];
 
 //-------------------------------------------------------------------------------------------------
 function isMiniature() {
-  return location.pathname.includes("/fullcpgrid/"); // special for Codepen.
+  return location.pathname.includes("/fullcpgrid/"); // Special for Codepen.
 }
 //-------------------------------------------------------------------------------------------------
 function alea(min, max) {
-  // random number [min..max[ . If no max is provided, [0..min[.
 
+  // Random number [min..max]. If no max is provided, min*mrandom().
   if (typeof max == "undefined") return min * mrandom();
   return min + (max - min) * mrandom();
-}
+}  /* function alea */
 //-------------------------------------------------------------------------------------------------
 function intAlea(min, max) {
-  // random integer number [min..max[ . If no max is provided, [0..min[.
 
+  // Random integer [min..max]. If no max is provided, max=min.
   if (typeof max == "undefined") {
     max = min;
     min = 0;
   }
   return mfloor(min + (max - min) * mrandom());
-} // intAlea
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+} /* function intAlea */
+//-------------------------------------------------------------------------------------------------
 function lerp(p0, p1, alpha) {
   return {
     x: p0.x * (1 - alpha) + p1.x * alpha,
     y: p0.y * (1 - alpha) + p1.y * alpha
   };
-}
+}  /* function lerp. */
 //-------------------------------------------------------------------------------------------------
 function arrayShuffle(array) {
-/* randomly changes the order of items in an array
-   only the order is modified, not the elements
-*/
+  /* Randomly changes the order of items in an array only the order is modified, not the elements. */
   let k1, temp;
   for (let k = array.length - 1; k >= 1; --k) {
     k1 = puzzle.prng.intAlea(0, k + 1);
     temp = array[k];
     array[k] = array[k1];
     array[k1] = temp;
-  } // for k
+  } // for k.
   return array;
-} // arrayShuffle
+} /* function arrayShuffle. */
 //-------------------------------------------------------------------------------------------------
-/* function below used to generate reproducible sequences of pseudo-random numbers.
-   one instance is used to create the details of the shapes of the pieces
-   so that only the seed of the function needs to be saved for save / restore operations 
-   of the puzzle.
+/* Function below used to generate reproducible sequences of pseudo-random numbers.
+   One instance is used to create the details of the shapes of the pieces so that only the seed 
+   of the function needs to be saved for save / restore operations of the puzzle.
 */
+/* Based on a function found at https://www.grc.com/otg/uheprng.htm and customized to my needs;
 
-/* based on a function found at https://www.grc.com/otg/uheprng.htm 
-and customized to my needs;
-
-use:
-  x = mMash('1213'); // returns a resettable, reproducible pseudo-random number generator function.
-  x = mMash();  // like line above, but uses Math.random() for a seed.
-  x();         // returns pseudo-random number in range [0..1[;
-  x.reset();   // re-initializes the sequence with the same seed. Even if Mash was invoked without seed, 
+Use:
+  x = mMash('1213'); // Returns a resettable, reproducible pseudo-random number generator function.
+  x = mMash();  // Like line above, but uses Math.random() for a seed.
+  x();         // Returns pseudo-random number in range [0..1];
+  x.reset();   // Re-initializes the sequence with the same seed. Even if Mash was invoked without seed, 
                   will generate the same sequence.
-  x.seed;      // retrieves the internal seed actually used. May be useful if no seed or non-string seed 
+  x.seed;      // Retrieves the internal seed actually used. May be useful if no seed or non-string seed 
                   provided to Mash.
                   Be careful: this internal x.seed is a String, even if it may look like a number. Changing 
                   or omitting any single digit will produce a completely different sequence.
-  x.intAlea(min, max) // returns integer in the range [min..max[ (or [0..min[ if max not provided).
-  x.alea(min, max) // returns float in the range [min..max[ (or [0..min[ if max not provided).
+  x.intAlea(min, max) // Returns integer in the range [min..max[ (or [0..min[ if max not provided).
+  x.alea(min, max) // Returns float in the range [min..max[ (or [0..min[ if max not provided).
 */
 
-/* ============================================================================
-   This is based upon Johannes Baagoe's carefully designed and efficient hash
-   function for use with JavaScript.  It has a proven "avalanche" effect such
-   that every bit of the input affects every bit of the output 50% of the time,
-   which is good.  See: http://baagoe.com/en/RandomMusings/hash/avalanche.xhtml
-   ============================================================================
+/* ================================================================================================
+   This is based upon Johannes Baagoe's carefully designed and efficient hash function for use with 
+   JavaScript. It has a proven "avalanche" effect such that every bit of the input affects every bit 
+   of the output 50% of the time, which is good. See: http://baagoe.com/en/RandomMusings/hash/avalanche.xhtml
+   ================================================================================================
 */
+
 /* Seed may be almost anything not evaluating to false. */
 function mMash(seed) {
   let n = 0xefc8249d;
@@ -172,14 +167,14 @@ function mMash(seed) {
         h *= n;
         n = h >>> 0;
         h -= n;
-        n += h * 0x100000000; // 2^32
+        n += h * 0x100000000; // 2^32.
       }
       return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
     } else n = 0xefc8249d;
   }  /* function mash(data) */
-  mash(intSeed); // initial value based on seed.
+  mash(intSeed); // Initial value based on seed.
 
-  let mmash = () => mash("A"); // could as well be 'B' or '!' or any non falsy value.
+  let mmash = () => mash("A"); // Could as well be 'B' or '!' or any non-falsy value.
   mmash.reset = () => {
     mash();
     mash(intSeed);
@@ -193,7 +188,7 @@ function mMash(seed) {
     return mfloor(min + (max - min) * this());
   };
   mmash.alea = function (min, max) {
-    // random number [min..max[ . If no max is provided, [0..min[
+    // Random number [min..max]. If no max is provided, this() * min.
 
     if (typeof max == "undefined") return min * this();
     return min + (max - min) * this();
@@ -205,7 +200,7 @@ function mMash(seed) {
 //-------------------------------------------------------------------------------------------------
 async function saveFile(data, fileName) {
   if (!("showSaveFilePicker" in window) || window.top !== window.self) {
-    // showSaveFilePicker, use old donload method
+    // showSaveFilePicker, use old download method.
     download(data, fileName, {
       mediaType: "text/plain;charset=utf8",
       preEncoded: false
@@ -233,21 +228,20 @@ async function saveFile(data, fileName) {
     await writable.close();
     return;
   } catch (err) {
-    if (err.name == "AbortError") return; // no message required if user cancelled
+    if (err.name == "AbortError") return; // No message required if user cancelled.
     popup(["Something went wrong saving your game.", `Error message: ${err}`]);
   }
 } /* function saveFile(data, filename). */
 
 //-------------------------------------------------------------------------------------------------
 function download(data, fileName, options = {}) {
-  /* data (string) containing the data to record
-     filename (string) the name to give to the file
-  */
-//-------------------------------------------------------------------------------------------------
-  /* Based on code found in a pen by Johann Karlsson https://codepen.io/DonKarlssonSan */
+
+  /* Data (string) containing the data to record filename (string) the name to give to the file. */
+  //-----------------------------------------------------------------------------------------------
+  /* Based on code found in a pen by Johann Karlsson https://codepen.io/DonKarlssonSan. */
   /* proposes to the user to save a file containing data from the program. */
 
-  let mediaType = ""; // no type results in text/plain;charset=US-ASCII
+  let mediaType = ""; // No type results in text/plain;charset=US-ASCII.
   if (typeof options.mediaType == "string") mediaType = options.mediaType;
 
   /* mediaType MUST include ';base64' if provided data is base64-encoded. */
@@ -270,9 +264,9 @@ function download(data, fileName, options = {}) {
 //------------------------------------------------------------------------
 class Modal {
   constructor(properties) {
-    // properties : {lines, buttons}
-    // lines : [strings] will be displayed in separate <p> tags
-    // buttons :[{text:string, callback(optional):function}]
+    // properties: {lines, buttons}.
+    // lines : [strings] will be displayed in separate <p> tags.
+    // buttons :[{text:string, callback(optional):function}].
 
     let modal = document.createElement("dialog");
     modal.style.borderRadius = "5px";
@@ -313,7 +307,7 @@ class Modal {
 } /* class Modal */
 
 function popup(lines) {
-  // basic Modal with lines of text, and a "close" button - no callback
+  // Basic Modal with lines of text, and a "close" button - no callback.
   new Modal({
     lines: lines,
     buttons: [{ text: "close" }]
@@ -324,7 +318,7 @@ function popup(lines) {
 // User Interface (controls)
 //-------------------------------------------------------------------------------------------------
 function prepareUI() {
-  // toggle menu handler.
+  // Toggle menu handler.
   let menu = document.getElementById("menu");
   let controls = document.getElementById("controls");
 
@@ -393,7 +387,7 @@ function prepareUI() {
 
   ui.saveext.innerHTML = fileExtension;
   controls.addEventListener("click", () => {
-    // toggle open/close
+    // Toggle open/close.
     if (menu.classList.contains("hidden")) ui.open();
     else ui.close();
   });  /* ui.saveext.innerHTML */
@@ -408,7 +402,7 @@ function prepareUI() {
     events.push({ event: "save", file: true })
   );
   ui.frestore.addEventListener("click", () => {
-    loadSaved(); // for Safari, the load file process only works if run from an event listener
+    loadSaved(); // For Safari, the load file process only works if run from an event listener.
     events.push({ event: "restore", file: true });
   });
   ui.help.addEventListener("click", () => popup(helptext));
@@ -419,7 +413,7 @@ function prepareUI() {
 //-------------------------------------------------------------------------------------------------
 function generatePoints(t) {
   return t.points.map((p) => {
-    let obj = { x: p.x, y: p.y }; // shallow copy
+    let obj = { x: p.x, y: p.y }; // Shallow copy.
     if (p.isCorner) obj.isCorner = true;
     if (p.isEdge) obj.isEdge = true;
     return obj;
@@ -432,21 +426,20 @@ class SortedArray {
      Things are inserted using .insert method sorted array is in the .tb property of the 
      instance.
   */
-  /*
-     The indexOf property lets you know if thing already existed according to fCompar, and 
+  /* The indexOf property lets you know if thing already existed according to fCompar, and 
      at what index just use doInsert(no parameters) after indexOf to insert thing at found 
      (not -1) index.
   */
 
-  /* CAUTION : if duplicates are allowed, indexOf is NOT garanteed to return the index of 
+  /* CAUTION: If duplicates are allowed, indexOf is NOT garanteed to return the index of 
      actual thing - only a thing which returns 0 when compared with given thing. Use regular 
      Array.indexOf on instance.tb instead.
   */
   constructor(fCompar, keepDuplicates = false) {
     /* fCompar is the function which will be called to compare the things that will 
-       be inserted in this.tb
+       be inserted in this.tb.
        fCompar(a,b) must return number < 0 if a must be placed before b == 0 if a 
-       and b are considered equal > 0 if a must be placed after b
+       and b are considered equal > 0 if a must be placed after b.
     */
     this.tb = [];
     this.fCompar = fCompar;
@@ -455,9 +448,9 @@ class SortedArray {
 
   indexOf(thing) {
     this.thing = thing;
-    // search for place to insert thing, using comparison function this.fCompar.
-    // if found, returns the index of thing in this.tb, else returns -1.
-    // sets this.insertAt for future insertion.
+    // Search for place to insert thing, using comparison function this.fCompar.
+    // If found, returns the index of thing in this.tb, else returns -1.
+    // Sets this.insertAt for future insertion.
 
     let cmp;
     if (this.tb.length == 0) {
@@ -472,27 +465,27 @@ class SortedArray {
       b = Math.floor((a + c) / 2);
       cmp = this.fCompar(this.tb[b], thing);
       switch (true) {
-        case cmp < 0: // thing after b
+        case cmp < 0: // Thing after b.
           if (b == c) {
             // beyond c
             this.insertAt = c + 1;
             return -1;
           }
-          if (a == b) ++b; // not to stay on same interval, if its length is 1 or 2
-          a = b; // after b : search (b, c) now
+          if (a == b) ++b; // Not to stay on same interval, if its length is 1 or 2.
+          a = b; // After b: search (b, c) now.
           break;
         case cmp == 0:
           this.insertAt = b;
-          return b; // found !
+          return b; // Found!
 
         default:
-          // thing before b
+          // Thing before b.
           if (b == a) {
-            // before a
+            // Before a.
             this.insertAt = a;
             return -1;
           }
-          c = b; // search (a, b) now
+          c = b; // Search (a, b) now.
       }  /* switch (true) */
     } while (true);
   } /* indexOf */
@@ -504,7 +497,7 @@ class SortedArray {
 
   insert(thing) {
     /* inserts thing */
-    if (this.indexOf(thing) != -1 && !this.keepDuplicates) return; // already exists and refused
+    if (this.indexOf(thing) != -1 && !this.keepDuplicates) return; // Already exists and refused.
     this.tb.splice(this.insertAt, 0, thing);
   }
 } /* class SortedArray */
@@ -518,13 +511,13 @@ class Edge {
       this.p0 = p1;
       this.p1 = p0;
     }
-    this.tris = []; // to record up to 2 triangles attached to this edge
+    this.tris = []; // To record up to 2 triangles attached to this edge.
   }
 
   attachTriangle(tri) {
-    // includes a triangle in and edge's tris array
-    // AND includes itself in this triangle's edges array
-    // AND more
+    // Includes a triangle in and edge's tris array.
+    // AND includes itself in this triangle's edges array.
+    // AND more.
 
     if (!this.p0.tris.includes(tri)) this.p0.tris.push(tri);
     if (!this.p1.tris.includes(tri)) this.p1.tris.push(tri);
@@ -587,7 +580,7 @@ class Triangle {
     return Math.hypot(p.x - this.xc, p.y - this.yc) < this.r;
   }
   hasEdge(p1, p2) {
-    // (was written before the above "Edge" class)
+    // (was written before the above "Edge" class).
     return (
       (p1 == this.a || p1 == this.b || p1 == this.c) &&
       (p2 == this.a || p2 == this.b || p2 == this.c)
@@ -604,43 +597,34 @@ class Triangle {
 } // Triangle
 //-------------------------------------------------------------------------------------------------
 class Delaunay {
-  /* Delaunay based on https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
-   */
+
+  /* Delaunay based on https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm */
   constructor(points, rect) {
     let triangulation, badTriangles, polygon;
-    /*
-       rect is a rectangle which contains all the points
-    */
 
-    /* triangulation := empty triangle mesh data structure */
-    /* add super-triangle to triangulation // must be large enough to completely contain all the points in pointList */
-    /*
-       /!\ CAUTION : all triangles generated will have the same orientation as this initial super-triangle
-    */
+    /* rect is a rectangle which contains all the points. */
+    /* triangulation := empty triangle mesh data structure. */
+    /* Add super-triangle to triangulation // Must be large enough to completely contain all the points in pointList. */
+    /* !CAUTION:! All triangles generated will have the same orientation as this initial super-triangle. */
     const numPts = points.length;
 
-    const pts = points; // .map((p, kp) => ({ x: p.x, y: p.y, kp })); // array of points - future vertices
-    pts.forEach((p, kp) => (p.kp = kp)); // add index to point
+    const pts = points; // .map((p, kp) => ({ x: p.x, y: p.y, kp })); // Array of points - future vertices.
+    pts.forEach((p, kp) => (p.kp = kp)); // Add index to point.
     this.points = pts;
     let supert = [
-      { x: rect.p0.x - 1, y: 2 * rect.p1.y - rect.p0.y + 3 }, // points turning clockwise on a JS 2D canvas
+      { x: rect.p0.x - 1, y: 2 * rect.p1.y - rect.p0.y + 3 }, // Points turning clockwise on a JS 2D canvas.
       { x: rect.p0.x - 1, y: rect.p0.y - 1 },
       { x: 2 * rect.p1.x - rect.p0.x + 3, y: rect.p0.y - 1 }
     ];
     triangulation = [new Triangle(...supert)];
 
-    /*
-       for each point in pointList do // add all the points one at a time to the triangulation
-    */
+    /* for each point in pointList do // Add all the points one at a time to the triangulation. */
     for (let kp = 0; kp < numPts; ++kp) {
       let point = pts[kp];
 
-    /*
-      badTriangles := empty set
-    */
+    /* badTriangles := empty set */
       badTriangles = [];
-    /*
-       for each triangle in triangulation do // first find all the triangles that are no longer 
+    /* for each triangle in triangulation do // First find all the triangles that are no longer 
        valid due to the insertion.
     */
       for (let kt = 0; kt < triangulation.length; ++kt) {
@@ -671,18 +655,18 @@ class Delaunay {
           polygon.push([tri.c, tri.a]);
       } // for kt
 
-      /* remove bad triangles from triangulation */
+      /* Remove bad triangles from triangulation. */
       for (let kt = 0; kt < badTriangles.length; ++kt) {
         let tri = badTriangles[kt];
         triangulation.splice(triangulation.indexOf(tri), 1);
       } // for kt
-      /* add triangulation new triangles built on point and polygon
-       */
+
+      /* Add triangulation new triangles built on point and polygon. */
       polygon.forEach((edge) =>
         triangulation.push(new Triangle(point, edge[0], edge[1]))
       );
     } // points.forEach
-    /* remove super-triangle */
+    /* Remove super-triangle */
     for (let kt = triangulation.length - 1; kt >= 0; --kt) {
       let tri = triangulation[kt];
       if (supert.includes(tri.a)) {
@@ -738,7 +722,7 @@ class Delaunay {
       let edge0, tri;
 
       if (p.tris.length != p.edges.length) {
-        // if point is on edge of complete figure
+        // If point is on edge of complete figure.
         edge0 = p.edges.find(
           (edge) =>
             (edge.p0 == p && edge.tris[0] && !edge.tris[1]) ||
@@ -749,13 +733,13 @@ class Delaunay {
         edge0 = p.edges[0];
       }
       while (true) {
-        /* find triangle with vertex p and edge edge0 starting from p and turning clockwise */
+        /* Find triangle with vertex p and edge edge0 starting from p and turning clockwise. */
         newEdges.push(edge0);
         tri = edge0.tris[edge0.p0 == p ? 0 : 1];
-        if (tri === undefined) break; // p was on perimeter, reached end
+        if (tri === undefined) break; // p was on perimeter, reached end.
         newTris.push(tri);
-        if (newEdges.length == p.edges.length) break; // made full revolution around p
-        /* find other side of tri ending at p */
+        if (newEdges.length == p.edges.length) break; // Made full revolution around p.
+        /* Find other side of tri ending at p. */
         switch (p) {
           case tri.a:
             edge0 = tri.edges[2];
@@ -787,9 +771,8 @@ class Delaunay {
 //-------------------------------------------------------------------------------------------------
 class RdPoint {
   constructor(parent, x, y) {
-    /*
-      parent is the RandomPoints object for which these RdPoints are constructed
-    */
+
+    /* parent is the RandomPoints object for which these RdPoints are constructed. */
     this.x = x;
     this.y = y;
     this.kx = Math.floor((x - parent.rect.p0.x) / parent.square);
@@ -803,28 +786,28 @@ class RdPoint {
 class RandomPoints {
   constructor(rect, dist, nbTries) {
     /*
-      rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}
-      p0 and p1 are defined by x and y coordinates
-      creates a set of points in rect with a minimum distance of dist
+      rect defines a rectangle by top left point p0 and bottom right point p1 : {p0,p1}.
+      p0 and p1 are defined by x and y coordinates.
+      Creates a set of points in rect with a minimum distance of dist.
       nbTries is a heuristic parameter.
     */
 
     const genValues = (range) => {
-      // generates a list of values from 0 to range, separated by at least this.dist
+      // Generates a list of values from 0 to range, separated by at least this.dist.
       let currv = 0;
       const list = [currv];
       let nbTries = 0;
       while (true) {
         let rnd = puzzle.prng();
-        let futv = currv + (1 + 0.5 * rnd * rnd) * this.dist; // keep it < 1.5 makes "flat" triangles on edges unlikely
+        let futv = currv + (1 + 0.5 * rnd * rnd) * this.dist; // Keep it < 1.5 makes "flat" triangles on edges unlikely.
         if (range - futv < this.dist) {
           ++nbTries;
           if (nbTries < 10) continue;
-          return list; // finished
+          return list; // Finished.
         }
         list.push(futv);
         currv = futv;
-        if (range - currv < 2 * dist) return list; //
+        if (range - currv < 2 * dist) return list;
       } // while true
     }; /* const genValues */
 
@@ -832,7 +815,7 @@ class RandomPoints {
     this.dist = dist;
     this.nbTries = nbTries;
 
-    // create a grid with the right dimensions.
+    // Create a grid with the right dimensions.
     this.square = this.dist;
     this.nbx = mceil((rect.p1.x - rect.p0.x) / this.square);
     this.nby = mceil((rect.p1.y - rect.p0.y) / this.square);
@@ -841,30 +824,30 @@ class RandomPoints {
       .fill(0)
       .map((v, ky) => new Array(this.nbx + 1).fill(0).map((v, kx) => []));
     this.terrain = terrain;
-    const points = []; // whole set of points which will be generated
+    const points = []; // Whole set of points which will be generated.
     this.points = points;
 
-    const list = []; // used temporarily to construct points :
+    const list = []; // Used temporarily to construct points.
     this.list = list;
-    // initialize list with points on the perimeter and corners.
-    // points will be added turning clockwise, which will be useful later to create Polygons on the edges.
+    // Initialize list with points on the perimeter and corners.
+    // Points will be added turning clockwise, which will be useful later to create Polygons on the edges.
 
-    let l = genValues(rect.p1.x - rect.p0.x); // along horizontal top side
+    let l = genValues(rect.p1.x - rect.p0.x); // Along horizontal top side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p0.x + v, rect.p0.y))
     );
 
-    l = genValues(rect.p1.y - rect.p0.y); // along vertical left side
+    l = genValues(rect.p1.y - rect.p0.y); // Along vertical left side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p1.x, rect.p0.y + v))
     );
 
-    l = genValues(rect.p1.x - rect.p0.x); // along horizontal bottom side.
+    l = genValues(rect.p1.x - rect.p0.x); // Along horizontal bottom side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p1.x - v, rect.p1.y))
     );
 
-    l = genValues(rect.p1.y - rect.p0.y); // along vertical left side.
+    l = genValues(rect.p1.y - rect.p0.y); // Along vertical left side.
     l.forEach((v) =>
       this.isAcceptable(new RdPoint(this, rect.p0.x, rect.p1.y - v))
     );
@@ -884,7 +867,7 @@ class RandomPoints {
       let found = false;
 
       for (let k = 0; k < nbTries; ++k) {
-        let p1 = this.rndr2r(); // number >= dist, but not too much
+        let p1 = this.rndr2r(); // number >= dist, but not too much.
         p1 = new RdPoint(this, p.x + p1.x, p.y + p1.y);
         if (this.isAcceptable(p1)) {
           found = true;
@@ -894,21 +877,20 @@ class RandomPoints {
     } // while list.length
 
     delete this.terrain;
-    // add each RdPoint its index in "points"
+    // Add each RdPoint its index in "points".
     points.forEach((p, k) => {
       p.kList = k;
-      delete p.kx; // no longer needed
+      delete p.kx; // No longer needed.
       delete p.ky;
     });
   } /* constructor(rect, dist, nbTries) */
 
   rndr2r() {
-    /* returns a random point at a distance from origin between this.dist and 2 * this.dist
-     */
-    //                    const r = this.dist * msqrt(1 + 3 * Math.random());  // that's the key for constant density!
+    /* Returns a random point at a distance from origin between this.dist and 2 * this.dist */
+    // const r = this.dist * msqrt(1 + 3 * Math.random());  // That's the key for constant density!
     let rnd = puzzle.prng();
     rnd *= rnd;
-    const r = this.dist * (1 + 0.7 * rnd); // rnd ^ 2 : higher density at lower radius
+    const r = this.dist * (1 + 0.7 * rnd); // rnd ^ 2 : higher density at lower radius.
     const th = Math.PI * puzzle.prng() * 2;
     return { x: r * Math.cos(th), y: r * Math.sin(th) };
   } /* rndr2r */
@@ -920,7 +902,7 @@ class RandomPoints {
       p.y < this.rect.p0.y ||
       p.y > this.rect.p1.y
     )
-      return false; // out of rect !
+      return false; // Out of rect!
     loop2: for (
       let kky = mmax(0, p.ky - 1);
       kky <= mmin(p.ky + 1, this.nby);
@@ -935,8 +917,8 @@ class RandomPoints {
           return false;
       } // for kkx
     } // for kky
-    // this point is acceptable
-    this.terrain[p.ky][p.kx].push(p); // record new point
+    // This point is acceptable.
+    this.terrain[p.ky][p.kx].push(p); // Record new point.
     this.list.push(p);
     this.points.push(p);
     return true;
@@ -961,7 +943,7 @@ class Polygon {
           this.vertices.push(tr.points[kp == 0 ? lastkp : kp - 1].p1);
         }
       });
-      //* choice for point C
+      // Choice for point C.
       this.c = {};
       if (p.isCorner) {
         let pa = this.vertices[1];
@@ -989,7 +971,7 @@ class Polygon {
         };
       }
     } else {
-      // "normal" polygon
+      // "normal" polygon.
       this.vertices = p.tris.map((tri) => tri.gc);
       this.c = {
         x: this.vertices.reduce((s, v) => s + v.x, 0) / this.vertices.length,
@@ -1001,25 +983,25 @@ class Polygon {
 
 //-------------------------------------------------------------------------------------------------
 function makeSaveFileName(src) {
-  /* builds a name suitable for a file (without extension) base on input string.
-     the input string is supposed to be an url with a "http" or "https" protocol, or a text that 
-     can reasonably be converted to a filename if it is an url, it is parsed to keep the last 
-     portion of its path name (after the last "/") the extension part (after the last "." if any) 
-     is stripped this names is copied to the user interface "save name" input field
+  /* Builds a name suitable for a file (without extension) base on input string.
+     The input string is supposed to be an url with a "http" or "https" protocol, or a text that 
+     can reasonably be converted to a filename. If it is a url, it is parsed to keep the last 
+     portion of its path name (after the last "/"). The extension part (after the last "." if any) 
+     is stripped. This names is copied to the user interface "save name" input field.
   */
   if (URL.canParse(src)) {
     src = URL.parse(src).pathname;
-    // keep last part of pathname
-    src = src.split("/").at(-1); // keep only part after last("/")
+    // Keep last part of pathname.
+    src = src.split("/").at(-1); // Keep only part after last("/").
   } // if canParse
   src = src.trim();
   if (src.length == 0) src = "save";
-  // strip extension if any
+  // Strip extension, if any.
   let lsti = src.lastIndexOf(".");
   if (lsti != -1) src = src.substring(0, lsti);
   src = src.trim();
   if (src.length == 0) src = "save";
-  // very elementary cleaning
+  // Very elementary cleaning.
   let nname = "";
   for (let k = 0; k < src.length; ++k) {
     const c = src.charAt(k);
@@ -1040,7 +1022,7 @@ function startGame() {
   events.push({ event: "nbpieces", nbpieces: Number(ui.nbpieces.value) });
 }
 function confirmStop() {
-  if (!playing) return; // ignore if not playing
+  if (!playing) return; // Ignore if not playing.
   new Modal({
     lines: ["Are you sure you want to stop this game ?"],
     buttons: [
@@ -1071,8 +1053,8 @@ const helpstoragetext = [
 ];
 
 const helpfiletext = [
-  'This method stores the saved game in your download folder. Use the "save name" field to save different 
-  games with different names.',
+  "This method stores the saved game in your download folder. Use the 'save name' field to save different 
+  games with different names.",
   "On some devices, you are not limited to the download folder: you will be prompted for the destination 
   folder and name."
 ];
@@ -1082,39 +1064,39 @@ function getTransformMatrix(orgx, orgy, scale, rot, destx, desty) {
   if (rot) mat.multiplySelf(puzzle.rotMat[rot]);
   mat.scaleSelf(scale, scale);
   return mat.translateSelf(-orgx, -orgy);
-} //
+} // function getTransformMatrix
 //-------------------------------------------------------------------------------------------------
-// one side of a piece
+// One side of a piece.
 class Side {
   constructor(type, points) {
-    this.type = type || ""; // "d" pour straight line or "z" pour classic
-    this.points = points || []; // real points or Bezier curve points
-  } // Side
+    this.type = type || ""; // "d" pour straight line or "z" pour classic.
+    this.points = points || []; // Real points or Bezier curve points.
+  } // class Side
 
   //-----------------------------------------------------------------------------------------------
   reversed() {
-    // returns a new Side, copy of current one but reversed
+    // Returns a new Side, copy of current one but reversed.
     const ns = new Side();
     ns.type = this.type;
     ns.points = this.points.slice().reverse();
     return ns;
-  } // Side.reversed
+  } // class Side.reversed
   //-----------------------------------------------------------------------------------------------
   /*
-    draws the path corresponding to a side
-    Parameters :
-      path : path2D or ctx where the path will be drawn
-      first : true to begin with moveTo, false to continue already begun path
+    Draws the path corresponding to a side.
+    Parameters:
+      path: path2D or ctx where the path will be drawn.
+      first: true to begin with moveTo, false to continue already begun path.
   */
   drawNormPath(path, first) {
-    // raw draw in path
+    // Raw draw in path.
     if (first) {
       path.moveTo(this.points[0].x, this.points[0].y);
     }
     if (this.type == "d") {
       path.lineTo(this.points[1].x, this.points[1].y);
     } else {
-      // edge zigzag
+      // Edge zigzag.
       for (let k = 1; k < this.points.length - 1; k += 3) {
         path.bezierCurveTo(
           this.points[k].x,
@@ -1129,16 +1111,16 @@ class Side {
   } // Side.drawNormPath
 } // class Side
 //-------------------------------------------------------------------------------------------------
-/* modifies a side
-   changes it from a straight line (type "d") to a complex one (type "z")
-   The change is done towards the opposite vertex (ca)
+/* Modifies a side.
+   Changes it from a straight line (type "d") to a complex one (type "z").
+   The change is done towards the opposite vertex (ca).
 */
 function twist0(side, ca) {
   const sp = side.points;
   const dxh = sp[1].x - sp[0].x;
   const dyh = sp[1].y - sp[0].y;
   const lsegh = mhypot(dxh, dyh);
-  if (lsegh < puzzle.distPoints * 0.4) return; // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
+  if (lsegh < puzzle.distPoints * 0.4) return; // Do not twist short edges (0.4 * distPoints is an arbitrary limit).
   const mid0 = lerp(sp[0], sp[1], 0.5);
 
   const dxv = ca.x - mid0.x;
@@ -1147,7 +1129,7 @@ function twist0(side, ca) {
   let scalev = puzzle.prng.alea(1.5, 2);
   const scaleh = puzzle.prng.alea(1, 1.3);
 
-  // limitation of ratio
+  // Limitation of ratio.
   const alpha = 2;
   if (scalev * lsegv > alpha * scaleh * lsegh)
     scalev = (alpha * scaleh * lsegh) / lsegv;
@@ -1229,9 +1211,9 @@ function twist0(side, ca) {
   } // pointAt
 } // twist0
 //-------------------------------------------------------------------------------------------------
-/* modifies a side
-   changes it from a straight line (type "d") to a complex one (type "z")
-   The change is done towards point ca
+/* Modifies a side.
+   Changes it from a straight line (type "d") to a complex one (type "z").
+   The change is done towards point ca.
 */
 function twist1(side, ca) {
   const sp = side.points;
@@ -1239,7 +1221,7 @@ function twist1(side, ca) {
   const dxh = sp[1].x - sp[0].x;
   const dyh = sp[1].y - sp[0].y;
   const lsegh = mhypot(dxh, dyh);
-  if (lsegh < puzzle.distPoints * 0.4) return; // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
+  if (lsegh < puzzle.distPoints * 0.4) return; // Do not twist short edges (0.4 * distPoints is an arbitrary limit).
   const mid0 = lerp(sp[0], sp[1], 0.5);
 
   const dxv = ca.x - mid0.x;
@@ -1281,9 +1263,9 @@ function twist1(side, ca) {
   } // pointAt
 } // twist1
 //-------------------------------------------------------------------------------------------------
-/* modifies a side
-   changes it from a straight line (type "d") to a complex one (type "z")
-   The change is done towards point ca
+/* Modifies a side.
+   Changes it from a straight line (type "d") to a complex one (type "z").
+   The change is done towards point ca.
 */
 function twist2(side, ca) {
   const sp = side.points;
@@ -1292,7 +1274,7 @@ function twist2(side, ca) {
   const dyh = sp[1].y - sp[0].y;
   // const lsegh = mhypot(dxh, dyh);
   // if (lsegh < (puzzle.distPoints * 0.4)) return; 
-  // do not twist short edges ( 0.4 * distPoints is an arbitrary limit)
+  // Do not twist short edges (0.4 * distPoints is an arbitrary limit).
   const mid0 = lerp(sp[0], sp[1], 0.5);
 
   const dxv = ca.x - mid0.x;
@@ -1316,9 +1298,7 @@ function twist2(side, ca) {
   } // pointAt
 } // twist2
 //-------------------------------------------------------------------------------------------------
-/* modifies a side
-   this one does not, in fact
-*/
+/* Modifies a side this one does not, in fact. */
 function twist3() {} // twist3
 
 //-------------------------------------------------------------------------------------------------
@@ -1345,10 +1325,10 @@ function twist4(side, ca, cb) {
 } // twist4
 //-------------------------------------------------------------------------------------------------
 class PolyPiece {
-  // represents a group of pieces well positionned with respect  to each other.
+  // Represents a group of pieces well positioned with respect to each other.
   constructor(initialPiece) {
     this.pieces = [initialPiece];
-    initialPiece.poly = this; // remember the polypiece this piece belongs to
+    initialPiece.poly = this; // Remember the polypiece this piece belongs to.
     this.selected = false;
     this.minx = initialPiece.minx;
     this.maxx = initialPiece.maxx;
@@ -1362,7 +1342,7 @@ class PolyPiece {
     this.listLoops();
     this.getSrcPath();
     this.getNormIntPath();
-    this.rot = 0; // PolyPiece is in "normal" position - 1 for 90 deg.cw, 2 and 3 for 180 and 270 deg
+    this.rot = 0; // PolyPiece is in "normal" position - 1 for 90 deg.cw, 2 and 3 for 180 and 270 deg.
   } // PolyPiece.constructor
 
   //-----------------------------------------------------------------------------------------------
@@ -1374,14 +1354,14 @@ class PolyPiece {
   */
 
   merge(otherPoly) {
-    // remove otherPoly from list of polypieces
+    // Remove otherPoly from list of polypieces.
     const kOther = puzzle.polyPieces.indexOf(otherPoly);
     puzzle.polyPieces.splice(kOther, 1);
 
     for (let k = 0; k < otherPoly.pieces.length; ++k) {
       otherPoly.pieces[k].poly = this;
       this.pieces.push(otherPoly.pieces[k]);
-    } // for k
+    } // for k.
 
     if (otherPoly.minx < this.minx) this.minx = otherPoly.minx;
     if (otherPoly.maxx > this.maxx) this.maxx = otherPoly.maxx;
@@ -1402,71 +1382,70 @@ class PolyPiece {
 
   //-----------------------------------------------------------------------------------------------
   ifNear(otherPoly) {
-    if (this.rot != otherPoly.rot) return false; // different orientations, can't collapse!
+    if (this.rot != otherPoly.rot) return false; // Different orientations, can't collapse!
 
     let p1, p2;
 
     if (mhypot(this.x - otherPoly.x, this.y - otherPoly.y) >= puzzle.dConnect)
-      return false; // not close enough
+      return false; // Not close enough.
 
-    // this and otherPoly are in good relative position, have they a common side ?
-    // in fact, a single point is enough
-    const sides = this.tbLoops.flat();
+    // This and otherPoly are in good relative position, have they a common side?
+    // In fact, a single point is enough, const sides = this.tbLoops.flat();
     const sides1 = otherPoly.tbLoops.flat();
     for (let ks = 0; ks < sides1.length; ++ks) {
       const sd = sides1[ks];
       if (sides.find((es) => es.points[0] == sd.points.at(-1))) return true;
     }
 
-    // nothing matches
+    // Nothing matches.
     return false;
   } // ifNear
 
   //-----------------------------------------------------------------------------------------------
-  /* algorithm to determine the boundary of a PolyPiece
-     input : a table of cells, hopefully defining a 'good' PolyPiece, i.e. all connected together
-     returned value : table of Loops, because the boundary may be made of several
-     simple loops : there may be a 'hole' in a PolyPiece
-     every loop is a list of consecutive sides
+  /* Algorithm to determine the boundary of a PolyPiece.
+     Input: a table of cells, hopefully defining a 'good' PolyPiece, i.e. all connected together.
+     Returned value: table of Loops, because the boundary may be made of several.
+     Simple loops: there may be a 'hole' in a PolyPiece.
+     Every loop is a list of consecutive sides.
   */
 
   listLoops() {
-    const tbLoops = []; // for the result
-    const tbEdges = []; // set of edges which are not shared by 2 pieces of input
-    let lp; // for loop during its creation
-    let currEdge; // current edge
-    let edgeNumber; // number of edge found during research
+    const tbLoops = []; // For the result.
+    const tbEdges = []; // Set of edges which are not shared by 2 pieces of input.
+    let lp; // For loop during its creation.
+    let currEdge; // Current edge.
+    let edgeNumber; // Number of edge found during research.
 
-    // create list of not shared edges (=> belong to boundary)
+    // Create list of not shared edges (=> belong to boundary).
     this.pieces.forEach((pc1) => {
       pc1.sides.forEach((side, k) => {
         if (side.polys.length == 2) {
           let other = side.polys[0] == pc1 ? side.polys[1] : side.polys[0];
-          if (other?.poly == this) return; // this side is common inside this polypiece
+          if (other?.poly == this) return; // This side is common inside this polypiece.
         }
         tbEdges.push(pc1.sideLines[k]);
-      }); // for kEdge
-    }); // for k
+      });
+    });
 
     while (tbEdges.length > 0) {
-      lp = []; // new loop
-      currEdge = tbEdges.shift(); // we begin with first available edge
-      lp.push(currEdge); // add it to loop
+      lp = []; // New loop.
+      currEdge = tbEdges.shift(); // We begin with first available edge.
+      lp.push(currEdge); // Add it to loop.
       do {
         edgeNumber = tbEdges.findIndex(
           (ed) => ed.points[0] == currEdge.points.at(-1)
         );
-        if (edgeNumber == -1) break; // finished loop
-        currEdge = tbEdges.splice(edgeNumber, 1)[0]; // new current edge
-        lp.push(currEdge); // add it to loop
-      } while (1); // do-while exited by break
-      tbLoops.push(lp); // add this loop to loops list
-    } // while tbEdges...
+        if (edgeNumber == -1) break; // Finished loop.
+        currEdge = tbEdges.splice(edgeNumber, 1)[0]; // New current edge.
+        lp.push(currEdge); // Add it to loop.
+      } while (1); // Do-while exited by break.
+      tbLoops.push(lp); // Add this loop to loops list.
+    } // while tbEdges.length > 0.
     this.tbLoops = tbLoops;
   } // polyPiece.listLoops
   //-----------------------------------------------------------------------------------------------
   getSrcPath() {
-    // returns an array of paths defined on a normalized image
+    // Returns an array of paths defined on a normalized image.
     this.srcPath = new Path2D();
     let pth;
     this.tbLoops.forEach((loop) => {
@@ -1480,12 +1459,12 @@ class PolyPiece {
   } // getSrcPath
   //-----------------------------------------------------------------------------------------------
   getNormIntPath() {
-    // returns a path made of all the internal edges
+    // Returns a path made of all the internal edges.
     this.normIntPath = new Path2D();
     let edg = this.tbLoops.flat();
     this.pieces.forEach((pc, kk) => {
       pc.sides.forEach((side, kk) => {
-        if (edg.includes(pc.sideLines[kk])) return; // this side in tbLoops
+        if (edg.includes(pc.sideLines[kk])) return; // This side in tbLoops.
         if (pc == side.polys[0]) side.drawNormPath(this.normIntPath, true);
       });
     });
@@ -1502,7 +1481,6 @@ class PolyPiece {
       this.y
     );
   } // setTransforms
-
   //-----------------------------------------------------------------------------------------------
   drawImage(special) {
     this.setTransforms(); // may be not the best place to do this.
@@ -2146,7 +2124,7 @@ class Puzzle {
         distPoints,
         30
       );
-      points = generatePoints(t); // shallow copy of RdPoints, without all the stuff which was only useful to creating the points
+      points = generatePoints(t); // Shallow copy of RdPoints, without all the stuff which was only useful to creating the points.
       tr = new Delaunay(points, t.rect);
       tr.analyze();
       tr.triangulation.forEach((tri) => tri.listTris());
@@ -2170,8 +2148,8 @@ class Puzzle {
         y: (tri.a.y + tri.b.y + tri.c.y) / 3
       };
     });
-    // we'll need intermediate points on segments on perimeter too
-    // we'll use the projection of gc on the edge
+    // We'll need intermediate points on segments on perimeter too.
+    // We'll use the projection of gc on the edge.
     // top edge
     let lastkp;
     for (
@@ -2179,7 +2157,7 @@ class Puzzle {
       tr.points[kp]?.isEdge || tr.points[kp]?.isCorner;
       ++kp
     ) {
-      if (tr.points[kp].isCorner) side = 1 - side; // results in 0 for vertical side, 1 for horizontal
+      if (tr.points[kp].isCorner) side = 1 - side; // Results in 0 for vertical side, 1 for horizontal.
       let tri = tr.points[kp].tris[0];
       let np = tr.points[kp + 1];
       if (!np?.isEdge && !np?.isCorner) np = tr.points[0];
@@ -2211,7 +2189,8 @@ class Puzzle {
       ctx.stroke();
     });
 
-    // define the sides of the polygons, and do not re-create side shared with another polygon
+    //---------------------------------------------------------------------------------------------
+    // Define the sides of the polygons, and do not re-create side shared with another polygon.
     polygons.forEach((poly) => {
       let side, side1;
       const nVert = poly.vertices.length;
@@ -2637,14 +2616,14 @@ let events = []; // queue for events
               doneSomething = false;
               for (let k = puzzle.polyPieces.length - 1; k >= 0; --k) {
                 let pp = puzzle.polyPieces[k];
-                if (pp == moving.pp) continue; // don't match with myself.
+                if (pp == moving.pp) continue; // Don't match with myself.
                 if (moving.pp.ifNear(pp)) {
-                  // a match !
+                  // A match!
                   merged = true;
                   // Compare polypieces sizes to move smallest one.
                   if (pp.pieces.length > moving.pp.pieces.length) {
                     pp.merge(moving.pp);
-                    moving.pp = pp; // memorize piece to follow
+                    moving.pp = pp; // Memorize piece to follow.
                   } else {
                     moving.pp.merge(pp);
                   }
@@ -2892,8 +2871,8 @@ let events = []; // queue for events
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 prepareUI();
-
 window.addEventListener("resize", (event) => {
+
   // Do not accumulate resize events in events queue - keep only current one.
   if (events.length && events[events.length - 1].event == "resize") return;
   events.push({ event: "resize" });
@@ -2902,5 +2881,5 @@ window.addEventListener("resize", (event) => {
 puzzle = new Puzzle({ container: "forPuzzle" });
 autoStart = isMiniature(); // used for nice miniature in CodePen
 
-loadInitialFile();
 requestAnimationFrame(animate);
+loadInitialFile();		
