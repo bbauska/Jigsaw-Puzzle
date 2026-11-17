@@ -1,4 +1,4 @@
-/* ./js/script.js of jigsaw-puzzle for puzzle.bauska.org */
+/* ./js/scripts.js of jigsaw-puzzle for puzzle.bauska.org */
 "use strict";
 // prior update: 2026/02/26
 // last update: 2026/11/05
