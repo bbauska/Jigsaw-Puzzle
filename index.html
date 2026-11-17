@@ -7,23 +7,26 @@
   <!-- meta viewport, title, desc, robot for SEO -->
   <meta name="author" content="Brian Bauska">
   <meta name="title" content="Jigsaw Puzzle">
-  <meta name="description" content="Make any puzzle from a loaded image. Either 12 pieces, 25, 100">
+  <meta name="description" content="Make any puzzle from a loaded image. Either 12 pieces, 25, 50, 
+    100, 200, 500, or 1000.">
   <meta name="keywords" content="website,web,site,zombie,Politics,culture,casino,capitalism,capitalize,
     political,disposability,death,America,culture,power,society,greed,avarice,excess,gluttony,selfishness,
     MIC,Military,Industrial,Complex,corruption,Dulles,Bush,Reagan,justice,youth,democracy,psychology,
     ideology,governance,spectacle,casinocapitalism,zombie,steak,Steak,YouTube,Sonic,sonic,SONIC,Silus,
-    Gaming,World,LuccasNeto,T-Series,SETIndia,Cocomelon,MrBeast,Beast,CE1,C-E-1,Beast,SilusGamingWorld,
-    SilusSpider,NickAR,Nick,NY,NYNick,NewYorkNick,URCristiano,UR,Cristiano,KidsDimaShow,VladandNiki,
-    LuisitoComunica,BrightSide,ZeeTV,DudePerfect,TipsOfficial,FNAF,FiveNightsatFreddies,TheMusicCompany,
-    PewDiePie, 5minutecrafts,A4,Sambucha,Sam&Colby,Sam&ColbyReacts,JuiceWorld,RayWilliamJohnson,FGTV,
-    KaicenatLive,IShowSpeed,Jelly,DanTDM,KSI,LoganPaul,JackSucksAtLife,PackGOD,JakePaul,Jake,PaulJakePaul,
-    SamGaming01,Veshreny,WWE,WorldWrestlingEntertainment,Smosh,DadsSpeed,TopperGuild,InternetAnarchist,
-    GuavaJuice,FortniteYoutubers,Sypherpk,LiveSPEEDY,AdenRoss,Preston,JohnnieJuilbert,YouTubeMovies,Sypherpk,
-    AnnoyingOrange,JackSepticeye,JackFilms,BBNo$,Unspeakable,MarkRober,TheFilmTheorist,TheGameTheorist,
-    minecraft,TheBoys,JTMusic,DAFUQBoom!?,AIMIN,Robby,BrentTV,EYStream,Fortnite,Ninja,SunnyV2,N30N,Dream,
-    SamFrank,Technoblade,RyanTrhan,Stellar,DJCook,AnthonyMadia,AnthonyIlla,SmoshGaming,SmoshPit,SmoshCast,
-    Fred,cellardoor,BriansBlog,CellarDoor,AJWorld,Packzilla,LearnJSwithBrian,#SilusGamingWorld,
-    #LearnJSwithBrian,Learn,JavaScript,with,Brian,#Silus,#Gaming,#World,#minecraft">
+	silus,#Silus,#silusgamingworld,#Silus Gaming World,#Silus Squad Members,SilusSquadMembers,SilusGamingWorld,
+    Gaming,World,LuccasNeto,T-Series,SETIndia,Cocomelon,MrBeast,Beast,CE1,C-E-1,Beast,SilusGamingWorld,Silus,
+	Squad,SilusSquadMembers,Spider,silusspider,SilusSpider,NickAR,Nick,NY,NYNick,NewYorkNick,URCristiano,UR,
+	Cristiano,KidsDimaShow,VladandNiki,LuisitoComunica,BrightSide,ZeeTV,DudePerfect,TipsOfficial,FNAF,
+	FiveNightsatFreddies,TheMusicCompany,PewDiePie, 5minutecrafts,A4,Sambucha,Sam&Colby,Sam&ColbyReacts,
+	JuiceWorld,RayWilliamJohnson,FGTV,KaicenatLive,IShowSpeed,Jelly,DanTDM,KSI,LoganPaul,JackSucksAtLife,PackGOD,
+	JakePaul,Jake,PaulJakePaul,SamGaming01,Veshreny,WWE,WorldWrestlingEntertainment,Smosh,DadsSpeed,TopperGuild,
+	InternetAnarchist,GuavaJuice,FortniteYoutubers,Sypherpk,LiveSPEEDY,AdenRoss,Preston,JohnnieJuilbert,
+	YouTubeMovies,Sypherpk,AnnoyingOrange,JackSepticeye,JackFilms,BBNo$,Unspeakable,MarkRober,TheFilmTheorist,
+	TheGameTheorist,minecraft,TheBoys,JTMusic,DAFUQBoom!?,AIMIN,Robby,BrentTV,EYStream,Fortnite,Ninja,SunnyV2,
+	N30N,Dream,SamFrank,Technoblade,RyanTrhan,Stellar,DJCook,AnthonyMadia,AnthonyIlla,SmoshGaming,SmoshPit,
+	SilasGamingWorld,SilasSquad,SilusSnake,SmoshCast,Fred,cellardoor,BriansBlog,CellarDoor,AJWorld,Packzilla,
+	LearnJSwithBrian,#SilusGamingWorld,#LearnJSwithBrian,Learn,JavaScript,with,Brian,#Silus,#Gaming,#World,
+	#minecraft">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta name="robots" content="index, follow">
 
@@ -63,14 +66,19 @@
     <p id="controls">close controls</p>
     <div id="showhide">
       <hr>
-      <p class="center"><button type="button" id="help">instructions</button></p>
+      <p class="center">
+	    <button type="button" id="help">instructions</button>
+	  </p>
       <hr>
       <p class="center">
         <button type="button" id="default">default image</button>
         <button type="button" id="load">load image</button>
       </p>
-      <p class="center"><button type="button" id="show">show image</button></p>
-      <p>rotation: <select id="rotationstep">
+      <p class="center">
+	    <button type="button" id="show">show image</button>
+	  </p>
+      <p>rotation: 
+	    <select id="rotationstep">
           <option value="0" selected>none</option>
           <option value="1">2 steps/turn</option>
           <option value="2">3 steps/turn</option>
@@ -80,41 +88,56 @@
           <option value="6">12 steps/turn</option>
         </select>
 	  </p>
-      <p>edge cutout: <select id="shape">
-        <option value="1" selected>classic</option>
-        <option value="2">triangle</option>
-        <option value="4">polygonal</option>
-        <option value="3">other 1</option>
-        <option value="5">other 2</option>
+      <p>edge cutout: 
+	    <select id="shape">
+          <option value="1" selected>classic</option>
+          <option value="2">triangle</option>
+          <option value="4">polygonal</option>
+          <option value="3">other 1</option>
+          <option value="5">other 2</option>
         </select>
 	  </p>
-      <p>number of pieces: <select id="nbpieces">
-        <option selected>12</option>
-        <option>25</option>
-        <option>50</option>
-        <option>100</option>
-        <option>200</option>
-        <option>500</option>
-        <option>1000</option>
+      <p>number of pieces: 
+	    <select id="nbpieces">
+          <option selected>12</option>
+          <option>25</option>
+          <option>50</option>
+          <option>100</option>
+          <option>200</option>
+          <option>500</option>
+          <option>1000</option>
         </select>
 	  </p>
-      <p>between connected pieces: <select id="drawmode">
-        <option value="1" selected>thin line</option>
-        <option value="2">flat</option>
-        <option value="3">bevel</option>
+      <p>between connected pieces: 
+	    <select id="drawmode">
+          <option value="1" selected>thin line</option>
+          <option value="2">flat</option>
+          <option value="3">bevel</option>
         </select>
 	  </p>
-      <p class="center"><button type="button" id="start">start game</button><button type="button" id="stop">stop
-        game</button>
+      <p class="center">
+	    <button type="button" id="start">start game</button>
+		<button type="button" id="stop">stop game</button>
 	  </p>
       <hr>
-      <p>storage: <button type="button" id="helpstorage">?</button></p>
-      <p class="center"><button type="button" id="save">save game</button><button type="button" id="restore">restore game</button></p>
+      <p>storage: 
+	    <button type="button" id="helpstorage">?</button>
+	  </p>
+      <p class="center">
+	    <button type="button" id="save">save game</button>
+		<button type="button" id="restore">restore game</button>
+	  </p>
       <hr>
-      <p>file: <button type="button" id="helpfile">?</button></p>
-      <p class="center"><button type="button" id="fsave">save game</button><button type="button" id="frestore">restore game</button></p>
-      <p>save name: <input type="text" id="saveas"><span id="saveext"></span>
-      </p>
+      <p>file: 
+	    <button type="button" id="helpfile">?</button>
+	  </p>
+      <p class="center">
+	    <button type="button" id="fsave">save game</button>
+		<button type="button" id="frestore">restore game</button>
+	  </p>
+      <p>save name: <input type="text" id="saveas">
+	    <span id="saveext"></span>
+	  </p>
     </div> <!-- showhide -->
   </div> <!-- menu -->
   <script  src="./js/scripts.js"></script>
