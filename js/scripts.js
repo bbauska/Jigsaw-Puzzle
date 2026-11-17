@@ -1,12 +1,13 @@
-/* ./js/scripts.js of jigsaw-puzzle for puzzle.bauska.org */
+/* ./js/scripts.js of Jigsaw-Puzzle for puzzle.bauska.org */
 "use strict";
-// prior update: 2026/02/26
-// last update: 2026/11/05
+
+// Prior update: 2026/02/26, 2026/11/06.
+// Last update: 2026/11/16.
 let puzzle, autoStart;
 let playing;
 let useMouse = true;
 let lastMousePos;
-let ui; // user interface (menu)
+let ui; // User interface (menu).
 const fileExtension = ".puzz";
 const fileSignature = "cpzfilecct"; // Just to check reloaded game has a chance to be a good one.
 
